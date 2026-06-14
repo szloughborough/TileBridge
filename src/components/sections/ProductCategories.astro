@@ -1,0 +1,185 @@
+---
+import SectionHeading from '../ui/SectionHeading.astro';
+import Card from '../ui/Card.astro';
+import { SITE_CONFIG } from '../../lib/siteConfig';
+const { categories } = SITE_CONFIG;
+const { productCounts } = Astro.props;
+const counts = productCounts || {};
+---
+
+<section class="product-categories">
+  <div class="container">
+    <SectionHeading
+      title="Наша продукция"
+      subtitle="Две основные категории — более 140 видов покрытий для любых задач"
+    />
+    <div class="product-categories__grid">
+      {categories.map((cat) => (
+        <a href={`/productiya/${cat.slug}/`} class="category-card">
+          <div class="category-card__image-wrapper">
+            <div class="category-card__image">
+              <img
+                src={cat.image}
+                alt={cat.shortTitle}
+                class="category-card__img"
+                loading="lazy"
+                onerror="this.style.display='none';this.nextElementSibling.style.display='flex'"
+              />
+              <div class="category-card__placeholder" style="display:none;">
+                <svg width="64" height="64" viewBox="0 0 64 64" fill="none">
+                  <rect x="8" y="8" width="20" height="20" rx="3" fill={cat.id === 'floor-tiles' ? '#1F3A5F' : '#C47A3A'} opacity="0.3"/>
+                  <rect x="36" y="8" width="20" height="20" rx="3" fill={cat.id === 'floor-tiles' ? '#C47A3A' : '#1F3A5F'} opacity="0.3"/>
+                  <rect x="8" y="36" width="20" height="20" rx="3" fill="#1F3A5F" opacity="0.3"/>
+                  <rect x="36" y="36" width="20" height="20" rx="3" fill="#C47A3A" opacity="0.3"/>
+                </svg>
+              </div>
+            </div>
+          </div>
+          <div class="category-card__body">
+            <h3 class="category-card__title">{cat.shortTitle} <span class="category-card__count">{counts[cat.id] || 0} видов</span></h3>
+            <p class="category-card__desc">{cat.description}</p>
+            <ul class="category-card__features">
+              {cat.features.slice(0, 2).map((f) => (
+                <li>{f}</li>
+              ))}
+            </ul>
+            <span class="category-card__cta">
+              Подробнее
+              <svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M6 4l4 4-4 4" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
+            </span>
+          </div>
+        </a>
+      ))}
+    </div>
+  </div>
+</section>
+
+<style>
+  .product-categories {
+    background: var(--color-white);
+  }
+
+  .product-categories__grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 30px;
+  }
+
+  .category-card {
+    display: flex;
+    flex-direction: column;
+    background: var(--color-bg-light);
+    border-radius: var(--radius-xl);
+    overflow: hidden;
+    text-decoration: none;
+    color: inherit;
+    transition: transform var(--transition), box-shadow var(--transition);
+  }
+
+  .category-card:hover {
+    transform: translateY(-4px);
+    box-shadow: var(--shadow-lg);
+  }
+
+  .category-card__image-wrapper {
+    aspect-ratio: 1;
+    overflow: hidden;
+  }
+
+  .category-card__image {
+    width: 100%;
+    height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: var(--color-stone-light);
+  }
+
+  .category-card__placeholder {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .category-card__img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+
+  .category-card__body {
+    padding: 28px;
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+  }
+
+  .category-card__title {
+    margin-bottom: 8px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+
+  .category-card__count {
+    display: inline-flex;
+    align-items: center;
+    padding: 3px 10px;
+    background: var(--color-primary);
+    color: var(--color-white);
+    border-radius: 20px;
+    font-size: 0.7rem;
+    font-weight: 700;
+    white-space: nowrap;
+  }
+
+  .category-card__desc {
+    font-size: 0.9rem;
+    color: var(--color-text-light);
+    margin-bottom: 16px;
+  }
+
+  .category-card__features {
+    list-style: none;
+    padding: 0;
+    margin: 0 0 20px;
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+  }
+
+  .category-card__features li {
+    font-size: 0.85rem;
+    color: var(--color-text-light);
+    padding-left: 20px;
+    position: relative;
+  }
+
+  .category-card__features li::before {
+    content: '✓';
+    position: absolute;
+    left: 0;
+    color: var(--color-accent);
+    font-weight: 700;
+  }
+
+  .category-card__cta {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    font-weight: 600;
+    color: var(--color-accent);
+    margin-top: auto;
+  }
+
+  @media (max-width: 768px) {
+    .product-categories__grid {
+      grid-template-columns: 1fr;
+    }
+
+    .category-card__image-wrapper {
+      aspect-ratio: 1;
+      max-height: 300px;
+    }
+  }
+</style>

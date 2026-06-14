@@ -1,0 +1,376 @@
+---
+import SectionHeading from '../ui/SectionHeading.astro';
+import { SITE_CONFIG } from '../../lib/siteConfig';
+import { getCollection } from 'astro:content';
+const { certifications } = SITE_CONFIG;
+
+const allProducts = await getCollection('products');
+const productCount = allProducts.length;
+---
+
+<section class="trust-proof">
+  <div class="container">
+    <SectionHeading
+      title="Качество, подтверждённое документально"
+      subtitle="Сертификаты и 10+ лет опыта экспорта в Россию и другие страны"
+    />
+
+    <!-- Stats strip -->
+    <div class="trust-proof__stats">
+      <div class="trust-proof__stat">
+        <strong>10+</strong>
+        <span>Лет экспорта</span>
+      </div>
+      <div class="trust-proof__stat">
+        <strong>15</strong>
+        <span>Стран поставок</span>
+      </div>
+      <div class="trust-proof__stat">
+        <strong>{productCount}+</strong>
+        <span>Видов продукции</span>
+      </div>
+      <div class="trust-proof__stat">
+        <strong>50</strong>
+        <span>м² минимальный заказ</span>
+      </div>
+    </div>
+
+    <div class="trust-proof__grid">
+      <div class="trust-proof__content">
+        <h3>Надёжность, которую вы можете проверить</h3>
+        <ul class="trust-proof__list">
+          <li>
+            <strong>Собственная фабрика</strong>
+            <span>Полный контроль на каждом этапе производства в Гуандуне, Китай</span>
+          </li>
+          <li>
+            <strong>Экспорт в Россию с 2013 года</strong>
+            <span>Понимаем требования рынка РФ, таможенные процедуры и сертификацию</span>
+          </li>
+          <li>
+            <strong>Международные сертификаты</strong>
+            <span>BSCI, ISO 9001, FSC, CE, RoHS — полный пакет для России</span>
+          </li>
+          <li>
+            <strong>Прозрачность производства</strong>
+            <span>Фото- и видеоотчёты по каждой партии на всех этапах</span>
+          </li>
+        </ul>
+      </div>
+      <div class="trust-proof__certs">
+        {certifications.map((cert) => (
+          <a href={cert.file} class="trust-proof__cert" target="_blank" rel="noopener noreferrer" download>
+            <div class="trust-proof__cert-icon">
+              <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
+                <path d="M12 2l3 3h5v5l3 3-3 3v5h-5l-3 3-3-3H4v-5l-3-3 3-3V5h5l3-3z" stroke="currentColor" stroke-width="1.5" fill="none"/>
+                <path d="M9 12l2 2 4-4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+              </svg>
+            </div>
+            <div class="trust-proof__cert-info">
+              <span class="trust-proof__cert-name">{cert.name}</span>
+              <span class="trust-proof__cert-action">Скачать PDF</span>
+            </div>
+          </a>
+        ))}
+      </div>
+    </div>
+
+    <div class="trust-proof__factory">
+      <div class="trust-proof__factory-visual">
+        <img src="/assets/images/factory/factory-05.jpg" alt="Фабрика в Гуандуне, Китай" class="trust-proof__factory-img" loading="lazy" onerror="this.style.display='none';this.nextElementSibling.style.display='flex'" />
+        <div class="trust-proof__factory-pattern" style="display:none;">
+          <svg width="120" height="120" viewBox="0 0 120 120" fill="none" opacity="0.15">
+            <rect x="10" y="10" width="100" height="40" rx="4" stroke="currentColor" stroke-width="2"/>
+            <rect x="20" y="18" width="25" height="24" rx="2" fill="currentColor" opacity="0.3"/>
+            <rect x="52" y="18" width="48" height="24" rx="2" fill="currentColor" opacity="0.15"/>
+            <rect x="10" y="58" width="45" height="52" rx="4" stroke="currentColor" stroke-width="2"/>
+            <rect x="20" y="70" width="25" height="30" rx="2" fill="currentColor" opacity="0.2"/>
+            <rect x="62" y="58" width="48" height="52" rx="4" stroke="currentColor" stroke-width="2"/>
+            <path d="M62 80h48M86 58v52" stroke="currentColor" stroke-width="1.5" opacity="0.5"/>
+          </svg>
+        </div>
+        <div class="trust-proof__factory-badge">
+          <svg width="20" height="20" viewBox="0 0 20 20" fill="none">
+            <circle cx="10" cy="10" r="9" stroke="currentColor" stroke-width="2"/>
+            <path d="M7 10l2 2 4-4" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+          </svg>
+          <span>Производство в Гуандуне, Китай</span>
+        </div>
+      </div>
+      <div class="trust-proof__factory-text">
+        <h3>Реальное производство с полным контролем</h3>
+        <p>Мы не трейдеры — у нас собственная фабрика в провинции Гуандун. Вы можете запросить онлайн-экскурсию по производству, свежие фото вашей партии или видеоотчёт о загрузке контейнера.</p>
+        <div class="trust-proof__factory-actions">
+          <a href="/kontakty/" class="trust-proof__factory-btn">
+            Запросить видео фабрики
+            <svg width="14" height="14" viewBox="0 0 14 14" fill="none"><path d="M3 3l8 8M11 3v8H3" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          </a>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<style>
+  .trust-proof {
+    background: var(--color-bg);
+  }
+
+  /* Stats strip */
+  .trust-proof__stats {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 20px;
+    margin-bottom: 50px;
+  }
+
+  .trust-proof__stat {
+    text-align: center;
+    padding: 28px 16px;
+    background: var(--color-white);
+    border-radius: var(--radius);
+    border: 1px solid var(--color-stone-light);
+  }
+
+  .trust-proof__stat strong {
+    display: block;
+    font-family: var(--font-heading);
+    font-size: 2rem;
+    font-weight: 800;
+    color: var(--color-primary);
+    line-height: 1.2;
+    margin-bottom: 4px;
+  }
+
+  .trust-proof__stat span {
+    font-size: 0.85rem;
+    color: var(--color-text-light);
+  }
+
+  /* Main grid */
+  .trust-proof__grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 40px;
+    margin-bottom: 50px;
+  }
+
+  .trust-proof__content h3 {
+    margin-bottom: 20px;
+  }
+
+  .trust-proof__list {
+    list-style: none;
+    padding: 0;
+  }
+
+  .trust-proof__list li {
+    padding: 18px 0;
+    border-bottom: 1px solid var(--color-stone-light);
+  }
+
+  .trust-proof__list li:last-child {
+    border-bottom: none;
+  }
+
+  .trust-proof__list li strong {
+    display: block;
+    color: var(--color-primary);
+    margin-bottom: 4px;
+    font-size: 1rem;
+  }
+
+  .trust-proof__list li span {
+    display: block;
+    font-size: 0.9rem;
+    color: var(--color-text-light);
+    line-height: 1.5;
+  }
+
+  /* Certification cards */
+  .trust-proof__certs {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 12px;
+    align-content: start;
+  }
+
+  .trust-proof__cert {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    padding: 18px;
+    background: var(--color-white);
+    border-radius: var(--radius);
+    text-decoration: none;
+    border: 1px solid var(--color-stone-light);
+    transition: all var(--transition);
+  }
+
+  .trust-proof__cert:hover {
+    border-color: var(--color-accent);
+    box-shadow: var(--shadow);
+    transform: translateY(-1px);
+  }
+
+  .trust-proof__cert-icon {
+    flex-shrink: 0;
+    width: 44px;
+    height: 44px;
+    border-radius: 50%;
+    background: var(--color-bg);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: var(--color-primary);
+  }
+
+  .trust-proof__cert:hover .trust-proof__cert-icon {
+    color: var(--color-accent);
+  }
+
+  .trust-proof__cert-info {
+    display: flex;
+    flex-direction: column;
+  }
+
+  .trust-proof__cert-name {
+    font-weight: 700;
+    font-size: 0.95rem;
+    color: var(--color-primary);
+  }
+
+  .trust-proof__cert-action {
+    font-size: 0.75rem;
+    color: var(--color-text-lighter);
+    margin-top: 2px;
+  }
+
+  .trust-proof__cert:hover .trust-proof__cert-action {
+    color: var(--color-accent);
+  }
+
+  /* Factory section */
+  .trust-proof__factory {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 40px;
+    align-items: center;
+    background: var(--color-white);
+    border-radius: var(--radius-xl);
+    overflow: hidden;
+  }
+
+  .trust-proof__factory-visual {
+    height: 320px;
+    background: linear-gradient(135deg, var(--color-primary) 0%, var(--color-primary-light) 100%);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+    color: var(--color-white);
+    overflow: hidden;
+  }
+
+  .trust-proof__factory-img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    position: absolute;
+    inset: 0;
+  }
+
+  .trust-proof__factory-pattern {
+    position: absolute;
+    opacity: 0.15;
+  }
+
+  .trust-proof__factory-badge {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 10px 20px;
+    background: rgba(255, 255, 255, 0.15);
+    backdrop-filter: blur(10px);
+    border-radius: 50px;
+    font-size: 0.9rem;
+    font-weight: 600;
+    color: var(--color-white);
+    z-index: 1;
+  }
+
+  .trust-proof__factory-text {
+    padding: 40px 40px 40px 0;
+  }
+
+  .trust-proof__factory-text h3 {
+    margin-bottom: 12px;
+  }
+
+  .trust-proof__factory-text p {
+    color: var(--color-text-light);
+    margin-bottom: 24px;
+    line-height: 1.7;
+  }
+
+  .trust-proof__factory-actions {
+    display: flex;
+    gap: 12px;
+  }
+
+  .trust-proof__factory-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    padding: 12px 24px;
+    background: var(--color-accent);
+    color: var(--color-white);
+    border-radius: var(--radius);
+    font-weight: 600;
+    font-size: 0.9rem;
+    text-decoration: none;
+    transition: all var(--transition);
+  }
+
+  .trust-proof__factory-btn:hover {
+    background: var(--color-accent-dark);
+    transform: translateY(-2px);
+    box-shadow: var(--shadow);
+    color: var(--color-white);
+  }
+
+  @media (max-width: 968px) {
+    .trust-proof__stats {
+      grid-template-columns: repeat(2, 1fr);
+    }
+  }
+
+  @media (max-width: 768px) {
+    .trust-proof__grid,
+    .trust-proof__factory {
+      grid-template-columns: 1fr;
+    }
+
+    .trust-proof__certs {
+      grid-template-columns: 1fr 1fr;
+    }
+
+    .trust-proof__factory-text {
+      padding: 24px;
+    }
+
+    .trust-proof__factory-visual {
+      height: 200px;
+    }
+  }
+
+  @media (max-width: 480px) {
+    .trust-proof__stats {
+      grid-template-columns: 1fr 1fr;
+    }
+
+    .trust-proof__certs {
+      grid-template-columns: 1fr;
+    }
+  }
+</style>

@@ -1,0 +1,44 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import Hero from '../components/sections/Hero.astro';
+import ProductCategories from '../components/sections/ProductCategories.astro';
+import FeaturedProducts from '../components/sections/FeaturedProducts.astro';
+import BuyerTypes from '../components/sections/BuyerTypes.astro';
+import WhyChooseUs from '../components/sections/WhyChooseUs.astro';
+import TrustProof from '../components/sections/TrustProof.astro';
+import ApplicationScenarios from '../components/sections/ApplicationScenarios.astro';
+import BlogTeaser from '../components/sections/BlogTeaser.astro';
+import CTASection from '../components/sections/CTASection.astro';
+import { getCollection } from 'astro:content';
+
+const allPosts = await getCollection('blog');
+allPosts.sort((a, b) => b.data.date.getTime() - a.data.date.getTime());
+const latestPosts = allPosts.slice(0, 3).map((post) => ({
+  title: post.data.title,
+  description: post.data.description,
+  slug: post.slug,
+  date: post.data.date.toLocaleDateString('ru-RU', { year: 'numeric', month: 'long', day: 'numeric' }),
+  category: post.data.category,
+}));
+
+const allProducts = await getCollection('products');
+const floorCount = allProducts.filter(p => p.data.category === 'floor-tiles').length;
+const wallCount = allProducts.filter(p => p.data.category === 'wall-tiles').length;
+
+// Get hot products for featured section (top 8 by weight)
+const hotProducts = allProducts
+  .filter(p => p.data.weight <= 8)
+  .sort((a, b) => a.data.weight - b.data.weight);
+---
+
+<BaseLayout>
+  <Hero />
+  <ProductCategories productCounts={{ 'floor-tiles': floorCount, 'wall-tiles': wallCount }} />
+  <FeaturedProducts products={hotProducts} />
+  <BuyerTypes />
+  <WhyChooseUs />
+  <TrustProof />
+  <ApplicationScenarios />
+  <BlogTeaser posts={latestPosts} />
+  <CTASection />
+</BaseLayout>

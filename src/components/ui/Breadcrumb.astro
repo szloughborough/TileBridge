@@ -1,0 +1,81 @@
+---
+export interface Props {
+  items: { label: string; href?: string }[];
+}
+
+const { items } = Astro.props;
+---
+
+<nav class="breadcrumb" aria-label="Хлебные крошки">
+  <ol class="breadcrumb__list">
+    <li class="breadcrumb__item">
+      <a href="/" class="breadcrumb__link">Главная</a>
+    </li>
+    {items.map((item, i) => (
+      <li class="breadcrumb__item">
+        {item.href ? (
+          <a href={item.href} class="breadcrumb__link">{item.label}</a>
+        ) : (
+          <span class="breadcrumb__current" aria-current="page">{item.label}</span>
+        )}
+      </li>
+    ))}
+  </ol>
+
+  <!-- JSON-LD BreadcrumbList -->
+  <script type="application/ld+json" set:html={JSON.stringify({
+    '@context': 'https://schema.org',
+    '@type': 'BreadcrumbList',
+    itemListElement: [
+      { '@type': 'ListItem', position: 1, name: 'Главная', item: 'https://tilebridge.ru/' },
+      ...items.filter(i => i.href).map((item, idx) => ({
+        '@type': 'ListItem',
+        position: idx + 2,
+        name: item.label,
+        item: `https://tilebridge.ru${item.href}`,
+      })),
+    ],
+  })} />
+</nav>
+
+<style>
+  .breadcrumb {
+    padding: 16px 0;
+    font-size: 0.85rem;
+  }
+
+  .breadcrumb__list {
+    display: flex;
+    flex-wrap: wrap;
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    gap: 8px;
+  }
+
+  .breadcrumb__item {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+
+  .breadcrumb__item:not(:last-child)::after {
+    content: '/';
+    color: var(--color-text-lighter);
+    font-size: 0.8rem;
+  }
+
+  .breadcrumb__link {
+    color: var(--color-text-light);
+    text-decoration: none;
+  }
+
+  .breadcrumb__link:hover {
+    color: var(--color-accent);
+  }
+
+  .breadcrumb__current {
+    color: var(--color-text);
+    font-weight: 600;
+  }
+</style>

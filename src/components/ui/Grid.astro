@@ -1,0 +1,59 @@
+---
+export interface Props {
+  cols?: 2 | 3 | 4 | 5;
+  gap?: 'sm' | 'md' | 'lg';
+  class?: string;
+}
+
+const { cols = 3, gap = 'lg', class: className } = Astro.props;
+---
+
+<div class={`grid grid--${cols}c grid--gap-${gap} ${className || ''}`}>
+  <slot />
+</div>
+
+<style>
+  .grid {
+    display: grid;
+  }
+
+  .grid--2c {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  .grid--3c {
+    grid-template-columns: repeat(3, 1fr);
+  }
+
+  .grid--4c {
+    grid-template-columns: repeat(4, 1fr);
+  }
+
+  .grid--5c {
+    grid-template-columns: repeat(5, 1fr);
+  }
+
+  .grid--gap-sm {
+    gap: 12px;
+  }
+
+  .grid--gap-md {
+    gap: 20px;
+  }
+
+  .grid--gap-lg {
+    gap: 30px;
+  }
+
+  @media (max-width: 968px) {
+    .grid--3c, .grid--4c, .grid--5c {
+      grid-template-columns: repeat(2, 1fr);
+    }
+  }
+
+  @media (max-width: 600px) {
+    .grid--2c, .grid--3c, .grid--4c, .grid--5c {
+      grid-template-columns: 1fr;
+    }
+  }
+</style>

@@ -1,0 +1,70 @@
+---
+export interface Props {
+  title: string;
+  subtitle?: string;
+  centered?: boolean;
+  light?: boolean;
+  class?: string;
+}
+
+const { title, subtitle, centered = true, light = false, class: className } = Astro.props;
+---
+
+<div class={`section-heading ${centered ? 'section-heading--centered' : ''} ${light ? 'section-heading--light' : ''} ${className || ''}`}>
+  <h2 class="section-heading__title">{title}</h2>
+  {subtitle && <p class="section-heading__subtitle">{subtitle}</p>}
+</div>
+
+<style>
+  .section-heading {
+    margin-bottom: 48px;
+  }
+
+  .section-heading--centered {
+    text-align: center;
+  }
+
+  .section-heading__title {
+    position: relative;
+    display: inline-block;
+    margin-bottom: 16px;
+  }
+
+  .section-heading--centered .section-heading__title::after {
+    content: '';
+    display: block;
+    width: 60px;
+    height: 3px;
+    background: var(--color-accent);
+    margin: 12px auto 0;
+    border-radius: 2px;
+  }
+
+  .section-heading:not(.section-heading--centered) .section-heading__title::after {
+    content: '';
+    display: block;
+    width: 60px;
+    height: 3px;
+    background: var(--color-accent);
+    margin-top: 12px;
+    border-radius: 2px;
+  }
+
+  .section-heading__subtitle {
+    font-size: 1.1rem;
+    color: var(--color-text-light);
+    max-width: 600px;
+  }
+
+  .section-heading--centered .section-heading__subtitle {
+    margin: 0 auto;
+  }
+
+  .section-heading--light .section-heading__title {
+    color: var(--color-white);
+  }
+
+  .section-heading--light .section-heading__subtitle {
+    color: rgba(255, 255, 255, 0.8);
+  }
+</style>

@@ -1,0 +1,109 @@
+---
+import ProductCard from '../ui/ProductCard.astro';
+import SectionHeading from '../ui/SectionHeading.astro';
+import { getDecorTag } from '../../lib/productHelpers';
+
+export interface Props {
+  products: any[];
+  title?: string;
+}
+
+const {
+  products,
+  title = 'Хиты продаж',
+} = Astro.props;
+
+// Prioritize products that have newImages / scene images
+const sorted = [...products].sort((a, b) => {
+  const aHasNew = a.data.newImages || a.data.sceneImage ? 1 : 0;
+  const bHasNew = b.data.newImages || b.data.sceneImage ? 1 : 0;
+  if (bHasNew !== aHasNew) return bHasNew - aHasNew;
+  return a.data.weight - b.data.weight;
+});
+
+const featured = sorted.slice(0, 8);
+---
+
+<section class="featured-products">
+  <div class="container">
+    <SectionHeading {title} subtitle="Самые популярные товары среди наших клиентов" />
+
+    {featured.length > 0 ? (
+      <div class="featured-products__grid">
+        {featured.map((product) => {
+          const decor = getDecorTag(product.data.subtitle);
+          return (
+            <ProductCard
+              product={product}
+              href={`/productiya/${product.data.category}/${product.slug}/`}
+              decor={decor}
+              isHot={true}
+            />
+          );
+        })}
+      </div>
+    ) : (
+      <div class="featured-products__empty">
+        <p>Товары временно недоступны. Пожалуйста, загляните позже.</p>
+      </div>
+    )}
+
+    <div class="featured-products__cta">
+      <a href="/productiya/" class="hero__btn hero__btn--secondary">Смотреть всю продукцию →</a>
+    </div>
+  </div>
+</section>
+
+<style>
+  .featured-products {
+    background: var(--color-white);
+    padding: 80px 0;
+  }
+
+  .featured-products__grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 20px;
+  }
+
+  .featured-products__empty {
+    text-align: center;
+    padding: 40px;
+    color: var(--color-text-light);
+  }
+
+  .featured-products__cta {
+    text-align: center;
+    margin-top: 40px;
+  }
+
+  .hero__btn--secondary {
+    display: inline-flex;
+    padding: 14px 28px;
+    border: 2px solid var(--color-primary);
+    border-radius: var(--radius);
+    font-family: var(--font-body);
+    font-size: 0.95rem;
+    font-weight: 600;
+    color: var(--color-primary);
+    text-decoration: none;
+    transition: all var(--transition);
+  }
+
+  .hero__btn--secondary:hover {
+    background: var(--color-primary);
+    color: var(--color-white);
+  }
+
+  @media (max-width: 1024px) {
+    .featured-products__grid {
+      grid-template-columns: repeat(2, 1fr);
+    }
+  }
+
+  @media (max-width: 480px) {
+    .featured-products__grid {
+      grid-template-columns: 1fr;
+    }
+  }
+</style>

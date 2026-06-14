@@ -1,0 +1,95 @@
+---
+import SectionHeading from '../ui/SectionHeading.astro';
+import Grid from '../ui/Grid.astro';
+import { SITE_CONFIG } from '../../lib/siteConfig';
+const { advantages } = SITE_CONFIG;
+
+const icons = [
+  // Factory / Manufacturing
+  '<svg width="28" height="28" viewBox="0 0 28 28" fill="none"><rect x="2" y="12" width="24" height="14" rx="2" stroke="currentColor" stroke-width="1.8"/><path d="M6 12V4h16v8" stroke="currentColor" stroke-width="1.8"/><path d="M14 4v8" stroke="currentColor" stroke-width="1.8"/><rect x="8" y="18" width="4" height="4" rx="1" fill="currentColor" opacity="0.4"/><rect x="16" y="18" width="4" height="4" rx="1" fill="currentColor" opacity="0.4"/></svg>',
+  // Globe / Export
+  '<svg width="28" height="28" viewBox="0 0 28 28" fill="none"><circle cx="14" cy="14" r="11" stroke="currentColor" stroke-width="1.8"/><ellipse cx="14" cy="14" rx="5" ry="11" stroke="currentColor" stroke-width="1.8"/><path d="M3 14h22" stroke="currentColor" stroke-width="1.8"/><circle cx="14" cy="14" r="3" fill="currentColor" opacity="0.3"/></svg>',
+  // Certificate / Badge
+  '<svg width="28" height="28" viewBox="0 0 28 28" fill="none"><path d="M14 2l3.5 3.5h6v6L27 14l-3.5 3.5v6h-6L14 27l-3.5-3.5h-6v-6L1 14l3.5-3.5v-6h6L14 2z" stroke="currentColor" stroke-width="1.8"/><path d="M10 14l3 3 5-5" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>',
+  // Flexibility / Customize
+  '<svg width="28" height="28" viewBox="0 0 28 28" fill="none"><circle cx="14" cy="14" r="4" stroke="currentColor" stroke-width="1.8"/><path d="M14 6V2M14 26v-4M22 14h4M2 14h4M19.07 8.93l2.83-2.83M6.1 21.9l2.83-2.83M19.07 19.07l2.83 2.83M6.1 6.1l2.83 2.83" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg>',
+];
+---
+
+<section class="why-choose-us">
+  <div class="container">
+    <SectionHeading
+      title="Почему выбирают TileBridge?"
+      subtitle="Преимущества работы с прямым производителем"
+    />
+    <Grid cols={4}>
+      {advantages.map((adv, i) => (
+        <div class="advantage-card">
+          <div class="advantage-card__icon" aria-hidden="true">
+            <div class="advantage-card__icon-inner" set:html={icons[i]} />
+          </div>
+          <h3 class="advantage-card__title">{adv.title}</h3>
+          <p class="advantage-card__desc">{adv.description}</p>
+        </div>
+      ))}
+    </Grid>
+  </div>
+</section>
+
+<style>
+  .why-choose-us {
+    background: var(--color-white);
+  }
+
+  .advantage-card {
+    text-align: center;
+    padding: 36px 20px;
+    border-radius: var(--radius-lg);
+    transition: all var(--transition);
+  }
+
+  .advantage-card:hover {
+    background: var(--color-bg-light);
+    transform: translateY(-2px);
+  }
+
+  .advantage-card__icon {
+    width: 72px;
+    height: 72px;
+    margin: 0 auto 20px;
+    border-radius: 50%;
+    background: linear-gradient(135deg, var(--color-bg) 0%, var(--color-bg-light) 100%);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+    color: var(--color-primary);
+    transition: all var(--transition);
+  }
+
+  .advantage-card:hover .advantage-card__icon {
+    background: var(--color-primary);
+    color: var(--color-white);
+    transform: scale(1.05);
+  }
+
+  .advantage-card__icon-inner {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 28px;
+    height: 28px;
+  }
+
+  .advantage-card__title {
+    font-size: 1.1rem;
+    margin-bottom: 12px;
+  }
+
+  .advantage-card__desc {
+    font-size: 0.9rem;
+    color: var(--color-text-light);
+    line-height: 1.6;
+    margin: 0;
+  }
+</style>

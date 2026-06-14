@@ -1,0 +1,98 @@
+---
+import SectionHeading from '../ui/SectionHeading.astro';
+import Card from '../ui/Card.astro';
+import Grid from '../ui/Grid.astro';
+
+export interface Props {
+  posts: { title: string; description: string; slug: string; date: string; category: string }[];
+}
+const { posts } = Astro.props;
+---
+
+<section class="blog-teaser">
+  <div class="container">
+    <SectionHeading
+      title="Полезные статьи"
+      subtitle="Руководства по выбору, советы оптовикам, идеи применения"
+    />
+    {posts.length > 0 ? (
+      <Grid cols={3}>
+        {posts.map((post) => (
+          <Card href={`/blog/${post.slug}/`}>
+            <article class="blog-teaser__post">
+              <span class="blog-teaser__category">{post.category}</span>
+              <h3 class="blog-teaser__title">{post.title}</h3>
+              <p class="blog-teaser__desc">{post.description}</p>
+              <span class="blog-teaser__read">Читать →</span>
+            </article>
+          </Card>
+        ))}
+      </Grid>
+    ) : (
+      <p style="text-align:center;color:var(--color-text-lighter);">
+        Статьи скоро появятся. Подпишитесь на Telegram, чтобы не пропустить.
+      </p>
+    )}
+    <div class="blog-teaser__all">
+      <a href="/blog/" class="blog-teaser__link">Все статьи →</a>
+    </div>
+  </div>
+</section>
+
+<style>
+  .blog-teaser {
+    background: var(--color-bg);
+  }
+
+  .blog-teaser__post {
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+  }
+
+  .blog-teaser__category {
+    display: inline-block;
+    padding: 4px 12px;
+    background: var(--color-bg);
+    color: var(--color-primary);
+    border-radius: 20px;
+    font-size: 0.75rem;
+    font-weight: 600;
+    margin-bottom: 12px;
+    align-self: flex-start;
+  }
+
+  .blog-teaser__title {
+    font-size: 1.1rem;
+    margin-bottom: 8px;
+  }
+
+  .blog-teaser__desc {
+    font-size: 0.9rem;
+    color: var(--color-text-light);
+    flex: 1;
+    margin-bottom: 16px;
+  }
+
+  .blog-teaser__read {
+    color: var(--color-accent);
+    font-weight: 600;
+    font-size: 0.9rem;
+  }
+
+  .blog-teaser__all {
+    text-align: center;
+    margin-top: 40px;
+  }
+
+  .blog-teaser__link {
+    display: inline-block;
+    font-weight: 600;
+    color: var(--color-primary);
+    font-size: 1rem;
+  }
+
+  .blog-teaser__link:hover {
+    color: var(--color-accent);
+  }
+</style>

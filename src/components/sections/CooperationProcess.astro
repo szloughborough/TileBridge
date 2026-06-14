@@ -1,0 +1,93 @@
+---
+import SectionHeading from '../ui/SectionHeading.astro';
+import { SITE_CONFIG } from '../../lib/siteConfig';
+const { cooperationSteps } = SITE_CONFIG;
+---
+
+<section class="cooperation">
+  <div class="container">
+    <SectionHeading
+      title="Как мы работаем"
+      subtitle="Прозрачный процесс от запроса до доставки"
+    />
+    <div class="cooperation__steps">
+      {cooperationSteps.map((step, i) => (
+        <div class="cooperation__step">
+          <div class="cooperation__step-num">
+            <span>{step.step}</span>
+            {i < cooperationSteps.length - 1 && <div class="cooperation__step-line"></div>}
+          </div>
+          <div class="cooperation__step-body">
+            <h3 class="cooperation__step-title">{step.title}</h3>
+            <p class="cooperation__step-desc">{step.description}</p>
+          </div>
+        </div>
+      ))}
+    </div>
+  </div>
+</section>
+
+<style>
+  .cooperation {
+    background: var(--color-white);
+  }
+
+  .cooperation__steps {
+    max-width: 700px;
+    margin: 0 auto;
+  }
+
+  .cooperation__step {
+    display: flex;
+    gap: 24px;
+    position: relative;
+  }
+
+  .cooperation__step:not(:last-child) {
+    padding-bottom: 32px;
+  }
+
+  .cooperation__step-num {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    flex-shrink: 0;
+  }
+
+  .cooperation__step-num span {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 44px;
+    height: 44px;
+    border-radius: 50%;
+    background: var(--color-primary);
+    color: var(--color-white);
+    font-family: var(--font-heading);
+    font-weight: 700;
+    font-size: 0.85rem;
+    flex-shrink: 0;
+  }
+
+  .cooperation__step-line {
+    width: 2px;
+    flex: 1;
+    background: var(--color-stone);
+    margin: 4px 0;
+  }
+
+  .cooperation__step-body {
+    padding-top: 8px;
+  }
+
+  .cooperation__step-title {
+    font-size: 1.1rem;
+    margin-bottom: 4px;
+  }
+
+  .cooperation__step-desc {
+    font-size: 0.9rem;
+    color: var(--color-text-light);
+    margin: 0;
+  }
+</style>

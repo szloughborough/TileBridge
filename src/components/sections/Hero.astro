@@ -1,0 +1,322 @@
+---
+import { getCollection } from 'astro:content';
+import { resolveProductMainImage } from '../../lib/productHelpers';
+
+export interface Props {
+  title?: string;
+  subtitle?: string;
+  primaryCTA?: { text: string; href: string };
+  secondaryCTA?: { text: string; href: string };
+  class?: string;
+  variant?: 'default' | 'products' | 'about';
+}
+
+const {
+  title = 'Самоклеящаяся плитка и ПВХ покрытия из Китая для России',
+  subtitle = 'Прямые поставки от производителя. B2B, оптом, под заказ. Индивидуальная упаковка и дизайн.',
+  primaryCTA = { text: 'Смотреть продукцию', href: '/productiya/' },
+  secondaryCTA = { text: 'Получить консультацию', href: '/kontakty/' },
+  variant = 'default',
+} = Astro.props;
+
+// Get a few product images for the hero decoration
+const allProducts = await getCollection('products');
+const heroProducts = allProducts
+  .filter(p => resolveProductMainImage(p))
+  .sort((a, b) => a.data.weight - b.data.weight)
+  .slice(0, 5);
+
+const heroProductImages = heroProducts.map(p => resolveProductMainImage(p));
+
+const totalCount = allProducts.length;
+---
+
+<section class={`hero hero--${variant}`}>
+  <div class="container">
+    <div class="hero__content">
+      <div class="hero__badge-group">
+        <span class="hero__badge">Прямой производитель из Китая</span>
+        <span class="hero__badge hero__badge--outline">B2B / Опт</span>
+      </div>
+      <h1 class="hero__title">{title}</h1>
+      <p class="hero__subtitle">{subtitle}</p>
+      <div class="hero__actions">
+        <a href={primaryCTA.href} class="hero__btn hero__btn--primary">{primaryCTA.text}</a>
+        <a href={secondaryCTA.href} class="hero__btn hero__btn--secondary">{secondaryCTA.text}</a>
+      </div>
+      <div class="hero__trust-line">
+        <span>Собственная фабрика в Гуандуне</span>
+        <span class="hero__trust-pipe">|</span>
+        <span>10+ лет экспорта в РФ</span>
+        <span class="hero__trust-pipe">|</span>
+        <span>Полный пакет сертификатов</span>
+      </div>
+      <div class="hero__stats">
+        <div class="hero__stat">
+          <strong>10+</strong>
+          <span>Лет экспорта</span>
+        </div>
+        <div class="hero__stat">
+          <strong>{totalCount}+</strong>
+          <span>Видов продукции</span>
+        </div>
+        <div class="hero__stat">
+          <strong>15</strong>
+          <span>Стран поставок</span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Product image decoration -->
+  {heroProductImages.length > 0 && (
+    <div class="hero__decoration" aria-hidden="true">
+      <div class="hero__tiles">
+        {heroProductImages.map((img, i) => (
+          <div
+            class="hero__tile"
+            style={`
+              width: ${[160, 120, 100, 80, 100][i]}px;
+              right: ${[8, 28, -1, 45, 38][i]}%;
+              top: ${[15, 55, 10, 8, 30][i]}%;
+              animation: heroFloat${i + 1} ${[8, 10, 7, 9, 11][i]}s ease-in-out infinite;
+              animation-delay: -${i * 1.5}s;
+            `}
+          >
+            <img
+              src={img}
+              alt=""
+              class="hero__product-img"
+              loading="lazy"
+              onerror="this.style.display='none'"
+            />
+          </div>
+        ))}
+      </div>
+    </div>
+  )}
+</section>
+
+<style>
+  .hero {
+    position: relative;
+    overflow: hidden;
+    padding: 100px 0 80px;
+    background: linear-gradient(135deg, var(--color-bg) 0%, var(--color-bg-light) 100%);
+  }
+
+  .hero__decoration {
+    position: absolute;
+    right: 0;
+    top: 0;
+    width: 50%;
+    height: 100%;
+    pointer-events: none;
+    overflow: hidden;
+  }
+
+  .hero__tiles {
+    position: relative;
+    width: 100%;
+    height: 100%;
+  }
+
+  .hero__tile { border-radius: var(--radius-lg); overflow: hidden; box-shadow: var(--shadow-lg); aspect-ratio: 1; background: var(--color-bg); position: absolute; }
+
+  .hero__product-img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+
+  @keyframes heroFloat1 {
+    0%, 100% { transform: translateY(0) rotate(0deg); }
+    50% { transform: translateY(-12px) rotate(2deg); }
+  }
+  @keyframes heroFloat2 {
+    0%, 100% { transform: translateY(0) rotate(0deg); }
+    50% { transform: translateY(-8px) rotate(-1.5deg); }
+  }
+  @keyframes heroFloat3 {
+    0%, 100% { transform: translateY(0) rotate(0deg); }
+    50% { transform: translateY(-10px) rotate(1deg); }
+  }
+  @keyframes heroFloat4 {
+    0%, 100% { transform: translateY(0) rotate(0deg); }
+    50% { transform: translateY(-6px) rotate(-1deg); }
+  }
+  @keyframes heroFloat5 {
+    0%, 100% { transform: translateY(0) rotate(0deg); }
+    50% { transform: translateY(-14px) rotate(2.5deg); }
+  }
+
+  .hero__content {
+    position: relative;
+    z-index: 1;
+    max-width: 620px;
+  }
+
+  .hero__badge-group {
+    display: flex;
+    gap: 8px;
+    margin-bottom: 24px;
+    flex-wrap: wrap;
+  }
+
+  .hero__badge {
+    display: inline-block;
+    padding: 6px 16px;
+    background: var(--color-primary);
+    color: var(--color-white);
+    border-radius: 20px;
+    font-size: 0.8rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+  }
+
+  .hero__badge--outline {
+    background: transparent;
+    color: var(--color-primary);
+    border: 1.5px solid var(--color-primary);
+    text-transform: none;
+    letter-spacing: normal;
+  }
+
+  .hero__title {
+    margin-bottom: 20px;
+    color: var(--color-primary);
+  }
+
+  .hero__subtitle {
+    font-size: 1.15rem;
+    color: var(--color-text-light);
+    line-height: 1.7;
+    margin-bottom: 32px;
+  }
+
+  .hero__trust-line {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    flex-wrap: wrap;
+    margin-bottom: 32px;
+    padding: 12px 20px;
+    background: rgba(196, 122, 58, 0.08);
+    border-radius: var(--radius);
+    border: 1px solid rgba(196, 122, 58, 0.15);
+  }
+
+  .hero__trust-pipe {
+    color: var(--color-accent);
+    opacity: 0.4;
+    font-weight: 300;
+  }
+
+  .hero__trust-line span {
+    font-size: 0.8rem;
+    font-weight: 500;
+    color: var(--color-text);
+  }
+
+  .hero__actions {
+    display: flex;
+    gap: 16px;
+    flex-wrap: wrap;
+  }
+
+  .hero__btn {
+    display: inline-flex;
+    align-items: center;
+    padding: 16px 36px;
+    border-radius: var(--radius);
+    font-weight: 700;
+    font-size: 1rem;
+    text-decoration: none;
+    transition: all var(--transition);
+  }
+
+  .hero__btn--primary {
+    background: var(--color-accent);
+    color: var(--color-white);
+  }
+
+  .hero__btn--primary:hover {
+    background: var(--color-accent-dark);
+    color: var(--color-white);
+    transform: translateY(-2px);
+    box-shadow: var(--shadow-lg);
+  }
+
+  .hero__btn--secondary {
+    background: transparent;
+    color: var(--color-primary);
+    border: 2px solid var(--color-primary);
+  }
+
+  .hero__btn--secondary:hover {
+    background: var(--color-primary);
+    color: var(--color-white);
+    transform: translateY(-2px);
+  }
+
+  .hero__stats {
+    display: flex;
+    gap: 40px;
+    margin-top: 40px;
+    padding-top: 28px;
+    border-top: 1px solid var(--color-stone);
+  }
+
+  .hero__stat {
+    display: flex;
+    flex-direction: column;
+  }
+
+  .hero__stat strong {
+    font-family: var(--font-heading);
+    font-size: 1.8rem;
+    font-weight: 800;
+    color: var(--color-primary);
+  }
+
+  .hero__stat span {
+    font-size: 0.85rem;
+    color: var(--color-text-light);
+  }
+
+  /* Products variant */
+  .hero--products .hero__content {
+    text-align: center;
+    margin: 0 auto;
+  }
+
+  .hero--products .hero__actions {
+    justify-content: center;
+  }
+
+  .hero--products .hero__stats {
+    justify-content: center;
+  }
+
+  .hero--products .hero__decoration {
+    display: none;
+  }
+
+  @media (max-width: 1024px) {
+    .hero__decoration { opacity: 0.4; }
+  }
+
+  @media (max-width: 768px) {
+    .hero { padding: 60px 0 50px; }
+    .hero__decoration { opacity: 0.2; }
+    .hero__content { max-width: 100%; }
+    .hero__stats { gap: 24px; flex-wrap: wrap; }
+    .hero__trust-line { gap: 8px; }
+    .hero__trust-line span { font-size: 0.75rem; }
+  }
+
+  @media (max-width: 480px) {
+    .hero__decoration { display: none; }
+  }
+</style>

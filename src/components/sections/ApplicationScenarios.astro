@@ -1,0 +1,99 @@
+---
+import SectionHeading from '../ui/SectionHeading.astro';
+import Grid from '../ui/Grid.astro';
+import { SITE_CONFIG } from '../../lib/siteConfig';
+const { scenarios } = SITE_CONFIG;
+
+const sceneIcons = [
+  // Residential - house
+  '<svg width="36" height="36" viewBox="0 0 36 36" fill="none"><path d="M4 18L18 4l14 14" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/><path d="M8 14v16h8V22h8v8h8V14" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/><rect x="20" y="24" width="4" height="6" fill="currentColor" opacity="0.3"/></svg>',
+  // Commercial - building
+  '<svg width="36" height="36" viewBox="0 0 36 36" fill="none"><rect x="6" y="4" width="24" height="28" rx="2" stroke="currentColor" stroke-width="2"/><path d="M6 12h24" stroke="currentColor" stroke-width="2"/><rect x="12" y="16" width="4" height="4" rx="1" fill="currentColor" opacity="0.3"/><rect x="20" y="16" width="4" height="4" rx="1" fill="currentColor" opacity="0.3"/><rect x="12" y="24" width="4" height="4" rx="1" fill="currentColor" opacity="0.3"/><rect x="20" y="24" width="4" height="4" rx="1" fill="currentColor" opacity="0.3"/></svg>',
+  // Hotel - bed
+  '<svg width="36" height="36" viewBox="0 0 36 36" fill="none"><rect x="4" y="6" width="28" height="20" rx="2" stroke="currentColor" stroke-width="2"/><rect x="8" y="14" width="10" height="8" rx="1" fill="currentColor" opacity="0.3"/><rect x="22" y="14" width="8" height="8" rx="1" fill="currentColor" opacity="0.3"/><path d="M4 26v4M32 26v4" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>',
+  // Exhibition - booth
+  '<svg width="36" height="36" viewBox="0 0 36 36" fill="none"><path d="M6 30V6h24v24" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/><path d="M6 14h24M6 22h24" stroke="currentColor" stroke-width="1.5" opacity="0.4"/><rect x="14" y="16" width="8" height="6" rx="1" stroke="currentColor" stroke-width="1.5"/></svg>',
+];
+
+const colors = [
+  { bg: 'rgba(31, 58, 95, 0.06)', accent: 'var(--color-primary)' },
+  { bg: 'rgba(196, 122, 58, 0.06)', accent: 'var(--color-accent)' },
+  { bg: 'rgba(31, 58, 95, 0.06)', accent: 'var(--color-primary)' },
+  { bg: 'rgba(196, 122, 58, 0.06)', accent: 'var(--color-accent)' },
+];
+---
+
+<section class="scenarios">
+  <div class="container">
+    <SectionHeading
+      title="Где применяется?"
+      subtitle="Универсальные покрытия для жилых и коммерческих помещений"
+    />
+    <Grid cols={4}>
+      {scenarios.map((s, i) => (
+        <div class="scenario-card" style={`--card-accent: ${colors[i].accent}; --card-bg: ${colors[i].bg};`}>
+          <div class="scenario-card__icon" aria-hidden="true" set:html={sceneIcons[i]} />
+          <div class="scenario-card__number">{i + 1}</div>
+          <h3 class="scenario-card__title">{s.title}</h3>
+          <p class="scenario-card__desc">{s.description}</p>
+        </div>
+      ))}
+    </Grid>
+  </div>
+</section>
+
+<style>
+  .scenarios {
+    background: var(--color-white);
+  }
+
+  .scenario-card {
+    text-align: center;
+    padding: 32px 20px;
+    border-radius: var(--radius-lg);
+    background: var(--card-bg);
+    border: 1px solid transparent;
+    transition: all var(--transition);
+    position: relative;
+  }
+
+  .scenario-card:hover {
+    border-color: var(--color-stone-light);
+    transform: translateY(-3px);
+    box-shadow: var(--shadow);
+  }
+
+  .scenario-card__icon {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 72px;
+    height: 72px;
+    margin: 0 auto 12px;
+    color: var(--card-accent);
+    opacity: 0.8;
+  }
+
+  .scenario-card__number {
+    position: absolute;
+    top: 12px;
+    right: 16px;
+    font-family: var(--font-heading);
+    font-size: 2.5rem;
+    font-weight: 800;
+    color: var(--card-accent);
+    opacity: 0.08;
+    line-height: 1;
+  }
+
+  .scenario-card__title {
+    font-size: 1.1rem;
+    margin-bottom: 8px;
+  }
+
+  .scenario-card__desc {
+    font-size: 0.9rem;
+    color: var(--color-text-light);
+    margin: 0;
+  }
+</style>

@@ -1,0 +1,227 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import SectionHeading from '../../components/ui/SectionHeading.astro';
+import Grid from '../../components/ui/Grid.astro';
+import Card from '../../components/ui/Card.astro';
+import CTASection from '../../components/sections/CTASection.astro';
+import Breadcrumb from '../../components/ui/Breadcrumb.astro';
+---
+
+<BaseLayout
+  title="Поставка в Россию — TileBridge"
+  description="Организация доставки товаров из Китая в Россию: море, Ж/Д, авиа. Полное таможенное оформление. FCL/LCL."
+>
+  <div class="container">
+    <Breadcrumb items={[{ label: 'Поставка в Россию' }]} />
+  </div>
+
+  <section class="log-hero">
+    <div class="container">
+      <div class="log-hero__content">
+        <h1>Поставка в Россию</h1>
+        <p class="log-hero__lead">Организуем доставку от двери фабрики до вашего склада. Берём на себя логистику, таможенное оформление и документацию.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- Supply Chain Process -->
+  <section class="log-process">
+    <div class="container">
+      <SectionHeading title="Схема поставки" subtitle="Прозрачный процесс от заказа до получения" />
+      <div class="log-process__steps">
+        <div class="log-step">
+          <div class="log-step__num">1</div>
+          <div class="log-step__body">
+            <h3>Подтверждение заказа</h3>
+            <p>Согласование спецификации, цены, сроков. Подписание контракта.</p>
+          </div>
+        </div>
+        <div class="log-step">
+          <div class="log-step__num">2</div>
+          <div class="log-step__body">
+            <h3>Производство</h3>
+            <p>Запуск производства после получения предоплаты. Срок 7–15 дней.</p>
+          </div>
+        </div>
+        <div class="log-step">
+          <div class="log-step__num">3</div>
+          <div class="log-step__body">
+            <h3>Контроль качества</h3>
+            <p>Проверка готовой партии. Фото- и видеоотчёт для клиента.</p>
+          </div>
+        </div>
+        <div class="log-step">
+          <div class="log-step__num">4</div>
+          <div class="log-step__body">
+            <h3>Отгрузка в порт</h3>
+            <p>Доставка груза в порт Гуанчжоу или Шэньчжэнь. Оформление экспортных документов.</p>
+          </div>
+        </div>
+        <div class="log-step">
+          <div class="log-step__num">5</div>
+          <div class="log-step__body">
+            <h3>Морская / Ж/Д перевозка</h3>
+            <p>Контейнерная перевозка до порта Владивосток, Санкт-Петербург или Новороссийск. Ж/Д через Суйфэньхэ.</p>
+          </div>
+        </div>
+        <div class="log-step">
+          <div class="log-step__num">6</div>
+          <div class="log-step__body">
+            <h3>Таможенное оформление</h3>
+            <p>Подготовка и подача декларации. Предоставляем все необходимые сертификаты и разрешения.</p>
+          </div>
+        </div>
+        <div class="log-step">
+          <div class="log-step__num">7</div>
+          <div class="log-step__body">
+            <h3>Доставка до склада</h3>
+            <p>Внутренняя перевозка по РФ до вашего склада любой ТК.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Shipping Methods -->
+  <section class="log-methods">
+    <div class="container">
+      <SectionHeading title="Способы доставки" />
+      <Grid cols={3}>
+        <Card variant="bordered" class="log-method">
+          <div class="log-method__icon">
+            <svg width="48" height="48" viewBox="0 0 48 48" fill="none"><path d="M8 32h4l4 4h16l4-4h4a4 4 0 004-4V16a4 4 0 00-4-4H28l-4 4H12v16" stroke="var(--color-primary)" stroke-width="2"/><circle cx="16" cy="36" r="4" stroke="var(--color-accent)" stroke-width="2"/><circle cx="36" cy="36" r="4" stroke="var(--color-accent)" stroke-width="2"/></svg>
+          </div>
+          <h3>Морская (FCL)</h3>
+          <ul>
+            <li>Срок: 25–35 дней</li>
+            <li>20GP / 40GP / 40HQ</li>
+            <li>Стоимость: от $2500</li>
+            <li>до портов РФ</li>
+          </ul>
+        </Card>
+        <Card variant="bordered" class="log-method">
+          <div class="log-method__icon">
+            <svg width="48" height="48" viewBox="0 0 48 48" fill="none"><rect x="6" y="14" width="36" height="20" rx="4" stroke="var(--color-primary)" stroke-width="2"/><line x1="8" y1="34" x2="40" y2="34" stroke="var(--color-accent)" stroke-width="2"/></svg>
+          </div>
+          <h3>Железная дорога</h3>
+          <ul>
+            <li>Срок: 15–20 дней</li>
+            <li>FCL / LCL</li>
+            <li>Через Суйфэньхэ</li>
+            <li>До любой станции РФ</li>
+          </ul>
+        </Card>
+        <Card variant="bordered" class="log-method">
+          <div class="log-method__icon">
+            <svg width="48" height="48" viewBox="0 0 48 48" fill="none"><path d="M24 8v24M12 20v8M36 20v8" stroke="var(--color-primary)" stroke-width="2"/><path d="M8 32h32v4a4 4 0 01-4 4H12a4 4 0 01-4-4v-4z" fill="var(--color-accent)" opacity="0.2" stroke="var(--color-accent)" stroke-width="2"/></svg>
+          </div>
+          <h3>Авиаперевозка</h3>
+          <ul>
+            <li>Срок: 5–7 дней</li>
+            <li>Для срочных заказов</li>
+            <li>До 500 кг</li>
+            <li>До любого аэропорта РФ</li>
+          </ul>
+        </Card>
+      </Grid>
+    </div>
+  </section>
+
+  <!-- Documents -->
+  <section class="log-docs">
+    <div class="container">
+      <SectionHeading title="Документы для поставки" subtitle="Полный пакет документов для таможенного оформления" />
+      <div class="log-docs__grid">
+        <Card class="log-doc">
+          <h4>Коммерческий инвойс</h4>
+          <p>Счёт-фактура с указанием стоимости, веса и количества товара.</p>
+        </Card>
+        <Card class="log-doc">
+          <h4>Упаковочный лист</h4>
+          <p>Детализация по каждому грузовому месту.</p>
+        </Card>
+        <Card class="log-doc">
+          <h4>Коносамент (B/L)</h4>
+          <p>Транспортный документ для морской перевозки.</p>
+        </Card>
+        <Card class="log-doc">
+          <h4>Сертификаты</h4>
+          <p>ISO, BSCI, FSC, CE, RoHS, протоколы испытаний.</p>
+        </Card>
+        <Card class="log-doc">
+          <h4>Фитосанитарный сертификат</h4>
+          <p>Для подтверждения безопасности упаковочных материалов.</p>
+        </Card>
+        <Card class="log-doc">
+          <h4>Страхование груза</h4>
+          <p>Страховка покрывает риски при транспортировке.</p>
+        </Card>
+      </div>
+    </div>
+  </section>
+
+  <CTASection
+    title="Рассчитать стоимость доставки"
+    subtitle="Отправьте заявку — мы подготовим полный расчёт с учётом логистики и таможни."
+    ctaText="Получить расчёт"
+    ctaHref="/kontakty/"
+  />
+</BaseLayout>
+
+<style>
+  .log-hero { padding: 20px 0 40px; }
+  .log-hero__content { max-width: 600px; }
+  .log-hero__lead { font-size: 1.1rem; color: var(--color-text-light); margin-top: 16px; }
+
+  .log-process { background: var(--color-white); }
+  .log-process__steps { max-width: 600px; margin: 0 auto; }
+  .log-step {
+    display: flex;
+    gap: 20px;
+    padding: 20px 0;
+    border-bottom: 1px solid var(--color-stone-light);
+  }
+  .log-step:last-child { border-bottom: none; }
+  .log-step__num {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    background: var(--color-primary);
+    color: var(--color-white);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: 700;
+    flex-shrink: 0;
+  }
+  .log-step__body h3 { margin-bottom: 4px; font-size: 1rem; }
+  .log-step__body p { color: var(--color-text-light); font-size: 0.9rem; margin: 0; }
+
+  .log-methods { background: var(--color-bg); }
+  .log-method { text-align: center; }
+  .log-method__icon { margin-bottom: 16px; }
+  .log-method h3 { margin-bottom: 12px; }
+  .log-method ul {
+    list-style: none;
+    padding: 0;
+  }
+  .log-method li {
+    padding: 4px 0;
+    font-size: 0.9rem;
+    color: var(--color-text-light);
+  }
+
+  .log-docs { background: var(--color-white); }
+  .log-docs__grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 20px;
+  }
+  .log-doc { text-align: center; }
+  .log-doc h4 { margin-bottom: 8px; }
+  .log-doc p { font-size: 0.9rem; color: var(--color-text-light); margin: 0; }
+
+  @media (max-width: 768px) {
+    .log-docs__grid { grid-template-columns: 1fr; }
+  }
+</style>

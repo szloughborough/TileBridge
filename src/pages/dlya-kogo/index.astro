@@ -1,0 +1,191 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import SectionHeading from '../../components/ui/SectionHeading.astro';
+import Grid from '../../components/ui/Grid.astro';
+import Card from '../../components/ui/Card.astro';
+import CTASection from '../../components/sections/CTASection.astro';
+import Breadcrumb from '../../components/ui/Breadcrumb.astro';
+import { SITE_CONFIG } from '../../lib/siteConfig';
+const { buyerTypes } = SITE_CONFIG;
+---
+
+<BaseLayout
+  title="Для кого — Кому подходит продукция TileBridge"
+  description="Наша продукция подходит для оптовых компаний, розничных сетей, интернет-магазинов, строительных компаний и дизайнеров."
+>
+  <div class="container">
+    <Breadcrumb items={[{ label: 'Для кого' }]} />
+  </div>
+
+  <section class="dk-hero">
+    <div class="container">
+      <div class="dk-hero__content">
+        <h1>Кому подходит наша продукция?</h1>
+        <p class="dk-hero__lead">Мы работаем с разными типами клиентов. Каждому предлагаем индивидуальные условия сотрудничества.</p>
+      </div>
+    </div>
+  </section>
+
+  <section class="dk-types">
+    <div class="container">
+      {buyerTypes.map((type, i) => (
+        <div class="dk-type">
+          <div class="dk-type__content">
+            <span class="dk-type__number">0{i + 1}</span>
+            <h2>{type.title}</h2>
+            <p>{type.description}</p>
+            <ul class="dk-type__benefits">
+              <li>Прямые поставки с завода</li>
+              <li>Индивидуальные условия</li>
+              <li>Полный пакет документов</li>
+              <li>Поддержка на всех этапах</li>
+            </ul>
+            <a href="/kontakty/" class="dk-type__cta">Узнать условия →</a>
+          </div>
+          <div class="dk-type__visual">
+            <div class="dk-type__icon">
+              {type.icon === 'warehouse' && <svg width="80" height="80" viewBox="0 0 80 80" fill="none"><rect x="12" y="20" width="56" height="48" rx="4" stroke="var(--color-primary)" stroke-width="2"/><path d="M12 28h56M24 40h8M24 52h8M44 40h20M44 52h20" stroke="var(--color-accent)" stroke-width="2"/><path d="M40 8L12 20h56L40 8z" fill="var(--color-primary)" opacity="0.2"/></svg>}
+              {type.icon === 'store' && <svg width="80" height="80" viewBox="0 0 80 80" fill="none"><rect x="8" y="24" width="64" height="44" rx="4" stroke="var(--color-primary)" stroke-width="2"/><path d="M16 24l8-12h32l8 12" stroke="var(--color-accent)" stroke-width="2"/><rect x="28" y="40" width="24" height="28" rx="2" fill="var(--color-primary)" opacity="0.2"/></svg>}
+              {type.icon === 'online' && <svg width="80" height="80" viewBox="0 0 80 80" fill="none"><rect x="8" y="16" width="64" height="48" rx="6" stroke="var(--color-primary)" stroke-width="2"/><circle cx="40" cy="40" r="12" stroke="var(--color-accent)" stroke-width="2"/><path d="M32 16h16l-4 8H36l-4-8z" fill="var(--color-primary)" opacity="0.2"/></svg>}
+              {type.icon === 'construction' && <svg width="80" height="80" viewBox="0 0 80 80" fill="none"><rect x="8" y="28" width="64" height="40" rx="4" stroke="var(--color-primary)" stroke-width="2"/><path d="M24 28V16h32v12" stroke="var(--color-accent)" stroke-width="2"/><line x1="40" y1="16" x2="40" y2="28" stroke="var(--color-accent)" stroke-width="2"/></svg>}
+              {type.icon === 'design' && <svg width="80" height="80" viewBox="0 0 80 80" fill="none"><circle cx="40" cy="40" r="28" stroke="var(--color-primary)" stroke-width="2"/><circle cx="40" cy="40" r="12" stroke="var(--color-accent)" stroke-width="2"/><circle cx="40" cy="40" r="4" fill="var(--color-primary)"/></svg>}
+            </div>
+          </div>
+        </div>
+      ))}
+    </div>
+  </section>
+
+  <CTASection
+    title="Не нашли свой тип бизнеса?"
+    subtitle="Свяжитесь с нами — мы обсудим возможности сотрудничества индивидуально."
+    ctaText="Связаться с нами"
+    ctaHref="/kontakty/"
+  />
+</BaseLayout>
+
+<style>
+  .dk-hero {
+    padding: 20px 0 40px;
+  }
+
+  .dk-hero__content {
+    max-width: 600px;
+  }
+
+  .dk-hero__lead {
+    font-size: 1.1rem;
+    color: var(--color-text-light);
+    margin-top: 16px;
+  }
+
+  .dk-types {
+    background: var(--color-white);
+  }
+
+  .dk-type {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 40px;
+    align-items: center;
+    padding: 50px 0;
+    border-bottom: 1px solid var(--color-stone-light);
+  }
+
+  .dk-type:last-child {
+    border-bottom: none;
+  }
+
+  .dk-type:nth-child(even) .dk-type__visual {
+    order: -1;
+  }
+
+  .dk-type__number {
+    display: inline-block;
+    font-family: var(--font-heading);
+    font-size: 0.8rem;
+    font-weight: 700;
+    color: var(--color-accent);
+    margin-bottom: 8px;
+    padding: 4px 12px;
+    border: 1px solid var(--color-accent);
+    border-radius: 4px;
+  }
+
+  .dk-type__content h2 {
+    margin-bottom: 12px;
+  }
+
+  .dk-type__content p {
+    color: var(--color-text-light);
+    margin-bottom: 20px;
+  }
+
+  .dk-type__benefits {
+    list-style: none;
+    padding: 0;
+    margin-bottom: 24px;
+  }
+
+  .dk-type__benefits li {
+    padding: 6px 0;
+    padding-left: 24px;
+    position: relative;
+    font-size: 0.9rem;
+  }
+
+  .dk-type__benefits li::before {
+    content: '✓';
+    position: absolute;
+    left: 0;
+    color: var(--color-accent);
+    font-weight: 700;
+  }
+
+  .dk-type__cta {
+    display: inline-block;
+    padding: 12px 28px;
+    background: var(--color-accent);
+    color: var(--color-white);
+    border-radius: var(--radius);
+    font-weight: 600;
+    text-decoration: none;
+    transition: background var(--transition);
+  }
+
+  .dk-type__cta:hover {
+    background: var(--color-accent-dark);
+    color: var(--color-white);
+  }
+
+  .dk-type__visual {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .dk-type__icon {
+    width: 160px;
+    height: 160px;
+    border-radius: 50%;
+    background: var(--color-bg);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  @media (max-width: 768px) {
+    .dk-type {
+      grid-template-columns: 1fr;
+    }
+
+    .dk-type:nth-child(even) .dk-type__visual {
+      order: 0;
+    }
+
+    .dk-type__icon {
+      width: 120px;
+      height: 120px;
+    }
+  }
+</style>

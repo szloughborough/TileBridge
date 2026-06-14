@@ -1,0 +1,239 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import SectionHeading from '../../components/ui/SectionHeading.astro';
+import Grid from '../../components/ui/Grid.astro';
+import Card from '../../components/ui/Card.astro';
+import InquiryForm from '../../components/sections/InquiryForm.astro';
+import Breadcrumb from '../../components/ui/Breadcrumb.astro';
+import { SITE_CONFIG } from '../../lib/siteConfig';
+const { company, faq } = SITE_CONFIG;
+---
+
+<BaseLayout
+  title="Контакты — TileBridge"
+  description="Свяжитесь с нами для получения оптовых цен, образцов и консультаций. Отвечаем в течение 24 часов."
+>
+  <div class="container">
+    <Breadcrumb items={[{ label: 'Контакты' }]} />
+  </div>
+
+  <!-- Hero -->
+  <section class="contact-hero">
+    <div class="container">
+      <div class="contact-hero__content">
+        <h1>Свяжитесь с нами</h1>
+        <p class="contact-hero__lead">
+          Мы всегда на связи и готовы ответить на ваши вопросы. Напишите нам — и мы поможем подобрать оптимальное решение для вашего бизнеса.
+        </p>
+      </div>
+    </div>
+  </section>
+
+  <!-- Contact Info Cards -->
+  <section class="contact-info">
+    <div class="container">
+      <Grid cols={4}>
+        <Card variant="bordered" class="contact-card">
+          <div class="contact-card__icon">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z" stroke="var(--color-accent)" stroke-width="2"/><polyline points="22,6 12,13 2,6" stroke="var(--color-accent)" stroke-width="2"/></svg>
+          </div>
+          <h4>Email</h4>
+          <a href={`mailto:${company.email}`}>{company.email}</a>
+        </Card>
+        <Card variant="bordered" class="contact-card">
+          <div class="contact-card__icon">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none"><path d="M22 16.92v3a2 2 0 01-2.18 2 19.79 19.79 0 01-8.63-3.07 19.5 19.5 0 01-6-6 19.79 19.79 0 01-3.07-8.67A2 2 0 014.11 2h3a2 2 0 012 1.72c.127.96.361 1.903.7 2.81a2 2 0 01-.45 2.11L8.09 9.91a16 16 0 006 6l1.27-1.27a2 2 0 012.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0122 16.92z" stroke="var(--color-accent)" stroke-width="2"/></svg>
+          </div>
+          <h4>Телефон</h4>
+          <a href={`tel:${company.phone}`}>{company.phone}</a>
+        </Card>
+        <Card variant="bordered" class="contact-card">
+          <div class="contact-card__icon">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="currentColor"><path d="M11.944 0A12 12 0 000 12a12 12 0 0012 12 12 12 0 0012-12A12 12 0 0012 0a12 12 0 00-.056 0zm4.962 7.224c.1-.002.321.023.465.14a.506.506 0 01.171.325c.016.127.007.49.007.49l-1.3 6.19c-.104.473-.466.624-.79.626-.31-.002-.585-.115-.585-.115l-3.41-2.305c-.313-.208-.348-.38-.042-.632l2.59-2.39c.134-.122.158-.165.01-.103l-3.58 2.155c-.17.098-.347.15-.498.132-.19-.023-.358-.105-.358-.105l-1.334-.44c-.32-.102-.44-.33-.08-.497l6.448-2.77c.295-.13.574-.055.68.023z"/></svg>
+          </div>
+          <h4>Telegram</h4>
+          <a href={company.telegram} target="_blank" rel="noopener noreferrer">@tilebridge</a>
+        </Card>
+        <Card variant="bordered" class="contact-card">
+          <div class="contact-card__icon">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none"><path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7z" stroke="var(--color-accent)" stroke-width="2"/><circle cx="12" cy="9" r="2.5" stroke="var(--color-accent)" stroke-width="2"/></svg>
+          </div>
+          <h4>Адрес</h4>
+          <p>{company.address}</p>
+        </Card>
+      </Grid>
+      <div class="contact-info__response">
+        <svg width="20" height="20" viewBox="0 0 20 20" fill="none"><path d="M10 18a8 8 0 100-16 8 8 0 000 16z" stroke="var(--color-accent)" stroke-width="1.5"/><path d="M10 6v4l3 2" stroke="var(--color-accent)" stroke-width="1.5"/></svg>
+        <span>{company.responseTime}</span>
+      </div>
+    </div>
+  </section>
+
+  <!-- Inquiry Form -->
+  <section class="contact-form">
+    <div class="container">
+      <SectionHeading
+        title="Отправить запрос"
+        subtitle="Заполните форму — мы подготовим индивидуальное коммерческое предложение"
+      />
+      <InquiryForm />
+    </div>
+  </section>
+
+  <!-- FAQ -->
+  <section class="contact-faq">
+    <div class="container">
+      <SectionHeading
+        title="Часто задаваемые вопросы"
+        subtitle="Ответы на самые распространённые вопросы"
+      />
+      <div class="contact-faq__list">
+        {faq.map((item) => (
+          <details class="contact-faq__item">
+            <summary class="contact-faq__question">{item.q}</summary>
+            <p class="contact-faq__answer">{item.a}</p>
+          </details>
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <!-- Map Placeholder -->
+  <section class="contact-map">
+    <div class="container">
+      <SectionHeading title="Мы находимся в Гуанчжоу, Китай" />
+      <div class="contact-map__placeholder">
+        <svg width="48" height="48" viewBox="0 0 48 48" fill="none"><circle cx="24" cy="24" r="20" stroke="var(--color-primary)" stroke-width="2" opacity="0.3"/><circle cx="24" cy="24" r="8" stroke="var(--color-accent)" stroke-width="2" opacity="0.5"/><circle cx="24" cy="24" r="3" fill="var(--color-accent)"/></svg>
+        <span>Гуанчжоу, провинция Гуандун, Китай</span>
+      </div>
+    </div>
+  </section>
+</BaseLayout>
+
+<style>
+  .contact-hero {
+    padding: 20px 0 40px;
+  }
+
+  .contact-hero__content {
+    max-width: 600px;
+  }
+
+  .contact-hero__lead {
+    font-size: 1.1rem;
+    color: var(--color-text-light);
+    margin-top: 16px;
+  }
+
+  .contact-info {
+    background: var(--color-white);
+  }
+
+  .contact-card {
+    text-align: center;
+  }
+
+  .contact-card__icon {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 48px;
+    height: 48px;
+    margin: 0 auto 12px;
+    background: var(--color-bg);
+    border-radius: 50%;
+  }
+
+  .contact-card h4 {
+    margin-bottom: 8px;
+  }
+
+  .contact-card a {
+    color: var(--color-primary);
+    font-weight: 500;
+    font-size: 0.9rem;
+    word-break: break-all;
+  }
+
+  .contact-card p {
+    color: var(--color-text-light);
+    font-size: 0.9rem;
+    margin: 0;
+  }
+
+  .contact-info__response {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    margin-top: 24px;
+    padding: 12px;
+    background: var(--color-bg);
+    border-radius: var(--radius);
+    font-weight: 600;
+    color: var(--color-primary);
+  }
+
+  .contact-form {
+    background: var(--color-bg);
+  }
+
+  .contact-faq {
+    background: var(--color-white);
+  }
+
+  .contact-faq__list {
+    max-width: 700px;
+    margin: 0 auto;
+  }
+
+  .contact-faq__item {
+    border-bottom: 1px solid var(--color-stone-light);
+    padding: 16px 0;
+  }
+
+  .contact-faq__question {
+    font-weight: 600;
+    cursor: pointer;
+    padding: 8px 0;
+    list-style: none;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+
+  .contact-faq__question::after {
+    content: '+';
+    font-size: 1.2rem;
+    color: var(--color-accent);
+    transition: transform var(--transition);
+  }
+
+  .contact-faq__item[open] .contact-faq__question::after {
+    transform: rotate(45deg);
+  }
+
+  .contact-faq__answer {
+    color: var(--color-text-light);
+    padding: 8px 0;
+    margin: 0;
+    font-size: 0.95rem;
+    line-height: 1.6;
+  }
+
+  .contact-map {
+    background: var(--color-bg);
+  }
+
+  .contact-map__placeholder {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 16px;
+    height: 300px;
+    background: var(--color-white);
+    border-radius: var(--radius-xl);
+    color: var(--color-text-light);
+  }
+</style>

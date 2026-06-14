@@ -1,0 +1,199 @@
+---
+export interface Props {
+  productTitle?: string;
+  class?: string;
+}
+
+const { productTitle, class: className } = Astro.props;
+---
+
+<div class={`inquiry-form-wrapper ${className || ''}`}>
+  <form class="inquiry-form" id="inquiry-form" action="https://api.web3forms.com/submit" method="POST">
+    <input type="hidden" name="access_key" value="YOUR_WEB3FORMS_KEY" />
+    <input type="hidden" name="subject" value={productTitle ? `Запрос: ${productTitle}` : 'Новый запрос с TileBridge.ru'} />
+    <input type="hidden" name="from_name" value="TileBridge.ru" />
+    <input type="checkbox" name="botcheck" class="sr-only" style="display: none;" />
+
+    <div class="form__row">
+      <div class="form__group">
+        <label for="form-name" class="form__label">Имя *</label>
+        <input type="text" id="form-name" name="name" required placeholder="Ваше имя" class="form__input" />
+      </div>
+      <div class="form__group">
+        <label for="form-company" class="form__label">Компания</label>
+        <input type="text" id="form-company" name="company" placeholder="Название компании" class="form__input" />
+      </div>
+    </div>
+
+    <div class="form__row">
+      <div class="form__group">
+        <label for="form-email" class="form__label">E-mail *</label>
+        <input type="email" id="form-email" name="email" required placeholder="your@email.com" class="form__input" />
+      </div>
+      <div class="form__group">
+        <label for="form-phone" class="form__label">Телефон</label>
+        <input type="tel" id="form-phone" name="phone" placeholder="+7 (999) 123-45-67" class="form__input" />
+      </div>
+    </div>
+
+    <div class="form__group">
+      <label for="form-product" class="form__label">Интересующий продукт</label>
+      <input type="text" id="form-product" name="product" placeholder="Например: самоклеящаяся плитка FT1825" value={productTitle || ''} class="form__input" />
+    </div>
+
+    <div class="form__group">
+      <label for="form-message" class="form__label">Сообщение *</label>
+      <textarea id="form-message" name="message" rows="4" required placeholder="Опишите ваш запрос: количество, сроки, особые требования..." class="form__textarea"></textarea>
+    </div>
+
+    <button type="submit" class="form__submit">Отправить запрос</button>
+    <p class="form__note">Нажимая кнопку, вы соглашаетесь на обработку персональных данных.</p>
+  </form>
+
+  <div class="form__success" id="form-success" hidden>
+    <div class="form__success-icon">
+      <svg width="48" height="48" viewBox="0 0 48 48" fill="none"><circle cx="24" cy="24" r="24" fill="#2E7D32" opacity="0.1"/><path d="M14 24l7 7 13-13" stroke="#2E7D32" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/></svg>
+    </div>
+    <h3>Спасибо за запрос!</h3>
+    <p>Мы ответим вам в течение 24 часов.</p>
+  </div>
+</div>
+
+<script>
+  const form = document.getElementById('inquiry-form');
+  const successEl = document.getElementById('form-success');
+
+  if (form && successEl) {
+    form.addEventListener('submit', async (e) => {
+      e.preventDefault();
+      const formData = new FormData(form);
+      const plainFormData = Object.fromEntries(formData.entries());
+      const jsonData = JSON.stringify(plainFormData);
+
+      try {
+        const response = await fetch(form.action, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json', 'Accept': 'application/json' },
+          body: jsonData,
+        });
+        const result = await response.json();
+
+        if (result.success) {
+          form.style.display = 'none';
+          successEl.hidden = false;
+        } else {
+          alert('Ошибка отправки. Пожалуйста, попробуйте ещё раз или напишите нам в Telegram.');
+        }
+      } catch (error) {
+        alert('Ошибка отправки. Пожалуйста, попробуйте ещё раз или напишите нам в Telegram.');
+      }
+    });
+  }
+</script>
+
+<style>
+  .inquiry-form-wrapper {
+    max-width: 700px;
+    margin: 0 auto;
+  }
+
+  .inquiry-form {
+    background: var(--color-white);
+    padding: 40px;
+    border-radius: var(--radius-xl);
+    box-shadow: var(--shadow);
+  }
+
+  .form__row {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 16px;
+  }
+
+  .form__group {
+    margin-bottom: 20px;
+  }
+
+  .form__label {
+    display: block;
+    font-weight: 600;
+    font-size: 0.9rem;
+    margin-bottom: 6px;
+    color: var(--color-text);
+  }
+
+  .form__input,
+  .form__textarea {
+    width: 100%;
+    padding: 12px 16px;
+    border: 2px solid var(--color-stone-light);
+    border-radius: var(--radius);
+    font-family: var(--font-body);
+    font-size: 0.95rem;
+    transition: border-color var(--transition);
+    background: var(--color-bg-light);
+    color: var(--color-text);
+  }
+
+  .form__input:focus,
+  .form__textarea:focus {
+    outline: none;
+    border-color: var(--color-primary);
+    background: var(--color-white);
+  }
+
+  .form__textarea {
+    resize: vertical;
+  }
+
+  .form__submit {
+    width: 100%;
+    padding: 16px;
+    background: var(--color-accent);
+    color: var(--color-white);
+    border: none;
+    border-radius: var(--radius);
+    font-family: var(--font-body);
+    font-size: 1rem;
+    font-weight: 700;
+    cursor: pointer;
+    transition: background var(--transition);
+  }
+
+  .form__submit:hover {
+    background: var(--color-accent-dark);
+  }
+
+  .form__note {
+    text-align: center;
+    font-size: 0.8rem;
+    color: var(--color-text-lighter);
+    margin-top: 12px;
+  }
+
+  .form__success {
+    text-align: center;
+    padding: 60px 20px;
+    background: var(--color-white);
+    border-radius: var(--radius-xl);
+    box-shadow: var(--shadow);
+  }
+
+  .form__success-icon {
+    margin-bottom: 16px;
+  }
+
+  .form__success h3 {
+    margin-bottom: 8px;
+  }
+
+  @media (max-width: 600px) {
+    .inquiry-form {
+      padding: 24px;
+    }
+
+    .form__row {
+      grid-template-columns: 1fr;
+    }
+  }
+</style>

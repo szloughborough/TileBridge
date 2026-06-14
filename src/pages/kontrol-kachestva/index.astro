@@ -1,0 +1,252 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import SectionHeading from '../../components/ui/SectionHeading.astro';
+import Grid from '../../components/ui/Grid.astro';
+import Card from '../../components/ui/Card.astro';
+import CTASection from '../../components/sections/CTASection.astro';
+import Breadcrumb from '../../components/ui/Breadcrumb.astro';
+import { SITE_CONFIG } from '../../lib/siteConfig';
+const { certifications } = SITE_CONFIG;
+---
+
+<BaseLayout
+  title="Контроль качества — TileBridge"
+  description="Система контроля качества продукции. Сертификаты BSCI, ISO, FSC, CE, RoHS. Каждая партия проходит проверку."
+>
+  <div class="container">
+    <Breadcrumb items={[{ label: 'Контроль качества' }]} />
+  </div>
+
+  <section class="qc-hero">
+    <div class="container">
+      <div class="qc-hero__content">
+        <h1>Контроль качества</h1>
+        <p class="qc-hero__lead">Каждая партия продукции проходит многоступенчатую проверку. Мы гарантируем стабильное качество от партии к партии.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- QC Process -->
+  <section class="qc-process">
+    <div class="container">
+      <SectionHeading title="Процесс контроля качества" subtitle="6 этапов проверки" />
+      <div class="qc-process__steps">
+        <div class="qc-process__step">
+          <div class="qc-step__num">01</div>
+          <h3>Входной контроль сырья</h3>
+          <p>Проверка всех поступающих материалов: ПВХ-гранул, пластификаторов, стабилизаторов, красителей.</p>
+        </div>
+        <div class="qc-process__step">
+          <div class="qc-step__num">02</div>
+          <h3>Контроль производства</h3>
+          <p>Мониторинг параметров на каждом этапе: каландрирование, нанесение клеевого слоя, тиснение, резка.</p>
+        </div>
+        <div class="qc-process__step">
+          <div class="qc-step__num">03</div>
+          <h3>Проверка геометрии</h3>
+          <p>Контроль точности размеров, прямых углов, толщины по всей площади плитки.</p>
+        </div>
+        <div class="qc-process__step">
+          <div class="qc-step__num">04</div>
+          <h3>Испытания покрытия</h3>
+          <p>Тестирование износостойкости, адгезии клеевого слоя, стойкости цвета к УФ-излучению.</p>
+        </div>
+        <div class="qc-process__step">
+          <div class="qc-step__num">05</div>
+          <h3>Химические тесты</h3>
+          <p>Проверка на соответствие требованиям RoHS, содержания формальдегида, летучих органических соединений.</p>
+        </div>
+        <div class="qc-process__step">
+          <div class="qc-step__num">06</div>
+          <h3>Фито-контроль</h3>
+          <p>Финальная проверка готовой продукции перед упаковкой и отгрузкой.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Test Standards -->
+  <section class="qc-standards">
+    <div class="container">
+      <SectionHeading title="Стандарты испытаний" />
+      <Grid cols={3}>
+        <Card variant="bordered">
+          <h4>Износостойкость</h4>
+          <p>Классы 34–42. Тестирование по методу Taber Abraser. Подтверждает пригодность для коммерческого использования.</p>
+        </Card>
+        <Card variant="bordered">
+          <h4>Противоскольжение</h4>
+          <p>Коэффициент трения ≥ 0.6. Соответствие стандартам безопасности для влажных помещений.</p>
+        </Card>
+        <Card variant="bordered">
+          <h4>Формальдегид</h4>
+          <p>Содержание формальдегида ниже предельно допустимых норм. Результаты подтверждены лабораторными тестами.</p>
+        </Card>
+        <Card variant="bordered">
+          <h4>RoHS</h4>
+          <p>Отсутствие опасных веществ: свинца, ртути, кадмия, шестивалентного хрома. Полный отчёт доступен.</p>
+        </Card>
+        <Card variant="bordered">
+          <h4>Адгезия</h4>
+          <p>Прочность сцепления клеевого слоя с основанием. Тестирование на различных поверхностях.</p>
+        </Card>
+        <Card variant="bordered">
+          <h4>УФ-стойкость</h4>
+          <p>Проверка цвета на выцветание под воздействием УФ-излучения. Минимальное изменение цвета за 1000 часов.</p>
+        </Card>
+      </Grid>
+    </div>
+  </section>
+
+  <!-- Certifications -->
+  <section class="qc-certs">
+    <div class="container">
+      <SectionHeading title="Сертификаты" subtitle="Полный пакет документов для таможенного оформления в РФ" />
+      <div class="qc-certs__grid">
+        {certifications.map((cert) => (
+          <a href={cert.file} class="qc-cert" target="_blank" rel="noopener noreferrer">
+            <div class="qc-cert__icon">
+              <svg width="40" height="40" viewBox="0 0 40 40" fill="none">
+                <rect x="6" y="4" width="28" height="32" rx="4" stroke="var(--color-primary)" stroke-width="1.5"/>
+                <path d="M14 16h12M14 22h12M14 28h8" stroke="var(--color-accent)" stroke-width="1.5"/>
+              </svg>
+            </div>
+            <div class="qc-cert__info">
+              <strong>{cert.name}</strong>
+              <span>Скачать PDF</span>
+            </div>
+          </a>
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <!-- Factory Photos -->
+  <section class="qc-factory">
+    <div class="container">
+      <SectionHeading title="Производство" subtitle="Фотографии фабрики и производственных линий" />
+      <div class="qc-factory__grid">
+        <div class="qc-factory__photo">
+          <img src="/assets/images/factory/factory-01.jpg" alt="Производственная линия" class="qc-factory__img" loading="lazy" onerror="this.style.display='none'" />
+        </div>
+        <div class="qc-factory__photo">
+          <img src="/assets/images/factory/factory-02.jpg" alt="Производственный цех" class="qc-factory__img" loading="lazy" onerror="this.style.display='none'" />
+        </div>
+        <div class="qc-factory__photo">
+          <img src="/assets/images/factory/factory-03.jpg" alt="Оборудование фабрики" class="qc-factory__img" loading="lazy" onerror="this.style.display='none'" />
+        </div>
+        <div class="qc-factory__photo">
+          <img src="/assets/images/factory/factory-04.jpg" alt="Готовая продукция" class="qc-factory__img" loading="lazy" onerror="this.style.display='none'" />
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <CTASection
+    title="Запросите сертификаты и отчёты"
+    subtitle="Отправьте запрос — мы предоставим полный пакет документов на вашу почту."
+    ctaText="Запросить документы"
+    ctaHref="/kontakty/"
+  />
+</BaseLayout>
+
+<style>
+  .qc-hero { padding: 20px 0 40px; }
+  .qc-hero__content { max-width: 600px; }
+  .qc-hero__lead { font-size: 1.1rem; color: var(--color-text-light); margin-top: 16px; }
+
+  .qc-process { background: var(--color-white); }
+  .qc-process__steps {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 24px;
+  }
+  .qc-process__step {
+    position: relative;
+    padding: 24px;
+    background: var(--color-bg-light);
+    border-radius: var(--radius);
+    border-left: 3px solid var(--color-accent);
+    transition: transform var(--transition), box-shadow var(--transition);
+  }
+  .qc-process__step:hover {
+    transform: translateY(-2px);
+    box-shadow: var(--shadow);
+  }
+  .qc-process__step:nth-child(1)::after,
+  .qc-process__step:nth-child(3)::after {
+    content: '↓';
+    position: absolute;
+    bottom: -22px;
+    left: 50%;
+    transform: translateX(-50%);
+    font-size: 1.2rem;
+    color: var(--color-accent);
+    opacity: 0.5;
+    font-weight: 700;
+  }
+  .qc-step__num {
+    font-family: var(--font-heading);
+    font-size: 0.75rem;
+    font-weight: 700;
+    color: var(--color-accent);
+    margin-bottom: 8px;
+  }
+  .qc-process__step h3 { margin-bottom: 8px; font-size: 1.05rem; }
+  .qc-process__step p { font-size: 0.9rem; color: var(--color-text-light); margin: 0; }
+
+  .qc-standards { background: var(--color-bg); }
+  .qc-standards h4 { margin-bottom: 8px; }
+  .qc-standards p { font-size: 0.9rem; color: var(--color-text-light); margin: 0; }
+
+  .qc-certs { background: var(--color-white); }
+  .qc-certs__grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 20px;
+  }
+  .qc-cert {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    padding: 20px;
+    background: var(--color-bg);
+    border-radius: var(--radius);
+    text-decoration: none;
+    color: var(--color-primary);
+    transition: all var(--transition);
+  }
+  .qc-cert:hover { background: var(--color-primary); color: var(--color-white); }
+  .qc-cert__info { display: flex; flex-direction: column; }
+  .qc-cert__info strong { font-size: 1rem; }
+  .qc-cert__info span { font-size: 0.8rem; opacity: 0.7; }
+
+  .qc-factory { background: var(--color-bg); }
+  .qc-factory__grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 16px;
+  }
+  .qc-factory__photo {
+    aspect-ratio: 4/3;
+    background: var(--color-white);
+    border-radius: var(--radius);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-shadow: var(--shadow-sm);
+    overflow: hidden;
+  }
+
+  .qc-factory__img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+
+  @media (max-width: 768px) {
+    .qc-process__steps { grid-template-columns: 1fr; }
+    .qc-certs__grid { grid-template-columns: 1fr 1fr; }
+    .qc-factory__grid { grid-template-columns: 1fr 1fr; }
+  }
+</style>

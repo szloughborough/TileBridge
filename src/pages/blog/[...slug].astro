@@ -1,0 +1,332 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import Breadcrumb from '../../components/ui/Breadcrumb.astro';
+import SectionHeading from '../../components/ui/SectionHeading.astro';
+import Grid from '../../components/ui/Grid.astro';
+import Card from '../../components/ui/Card.astro';
+import CTASection from '../../components/sections/CTASection.astro';
+import InquiryForm from '../../components/sections/InquiryForm.astro';
+import { getCollection } from 'astro:content';
+
+export async function getStaticPaths() {
+  const posts = await getCollection('blog');
+  return posts.map((post) => ({
+    params: { slug: post.slug },
+    props: { post },
+  }));
+}
+
+const { post } = Astro.props;
+const { data, body } = post;
+const allPosts = await getCollection('blog');
+const related = allPosts
+  .filter((p) => p.data.category === data.category && p.slug !== post.slug)
+  .slice(0, 3);
+const siteUrl = 'https://tilebridge.ru';
+---
+
+<BaseLayout
+  title={data.title}
+  description={data.description}
+  type="article"
+  canonical={`${siteUrl}/blog/${post.slug}/`}
+  image={data.image}
+>
+  <div class="container">
+    <Breadcrumb items={[
+      { label: 'Блог', href: '/blog/' },
+      { label: data.title },
+    ]} />
+  </div>
+
+  <article class="blog-post">
+    <div class="container">
+      <div class="blog-post__header">
+        <span class="blog-post__category">{data.category}</span>
+        <h1>{data.title}</h1>
+        <div class="blog-post__meta">
+          <span>{data.author}</span>
+          <span>•</span>
+          <time datetime={data.date.toISOString()}>
+            {data.date.toLocaleDateString('ru-RU', { year: 'numeric', month: 'long', day: 'numeric' })}
+          </time>
+          {data.tags.length > 0 && (
+            <>
+              <span>•</span>
+              <span>{data.tags.join(', ')}</span>
+            </>
+          )}
+        </div>
+      </div>
+
+      <div class="blog-post__image">
+        <img
+          src={data.image}
+          alt={data.title}
+          class="blog-post__img"
+          onerror="this.style.display='none'"
+        />
+      </div>
+
+      <div class="blog-post__content">
+        <div class="blog-post__body">
+          <slot name="content" />
+          {body && <div set:html={body} />}
+          {!body && (
+            <>
+              <p>{data.description}</p>
+              <p>Полная версия статьи готовится. Подпишитесь на наш Telegram, чтобы не пропустить новые публикации.</p>
+            </>
+          )}
+        </div>
+
+        <!-- FAQ Section -->
+        {data.category === 'Руководство по выбору' && (
+          <div class="blog-post__section">
+            <SectionHeading title="Часто задаваемые вопросы" centered={false} />
+            <div class="blog-post__faq">
+              <details class="blog-post__faq-item">
+                <summary>Какой минимальный объём заказа?</summary>
+                <p>MOQ для пробной партии — от 50 м². Для стандартных заказов — от 200 м².</p>
+              </details>
+              <details class="blog-post__faq-item">
+                <summary>Как получить образцы?</summary>
+                <p>Отправляем образцы почтой. Стоимость образцов возвращается при первом заказе.</p>
+              </details>
+              <details class="blog-post__faq-item">
+                <summary>Какие сроки поставки в РФ?</summary>
+                <p>Море 25–35 дн., Ж/Д 15–20 дн., авиа 5–7 дн.</p>
+              </details>
+            </div>
+          </div>
+        )}
+
+        <!-- Share -->
+        <div class="blog-post__share">
+          <span>Поделиться:</span>
+          <a href={`https://wa.me/?text=${encodeURIComponent(data.title + ' ' + siteUrl + '/blog/' + post.slug + '/')}`} target="_blank" rel="noopener noreferrer" class="share-btn">
+            WhatsApp
+          </a>
+          <a href={`https://t.me/share/url?url=${encodeURIComponent(siteUrl + '/blog/' + post.slug + '/')}&text=${encodeURIComponent(data.title)}`} target="_blank" rel="noopener noreferrer" class="share-btn">
+            Telegram
+          </a>
+          <a href={`mailto:?subject=${encodeURIComponent(data.title)}&body=${encodeURIComponent(siteUrl + '/blog/' + post.slug + '/')}`} class="share-btn">
+            Email
+          </a>
+          <button class="share-btn" id="copy-link-btn" data-url={`${siteUrl}/blog/${post.slug}/`}>
+            Копировать ссылку
+          </button>
+        </div>
+
+        <!-- Ask a Question -->
+        <div class="blog-post__question">
+          <SectionHeading title="Задать вопрос" subtitle="Не нашли ответ? Напишите нам" centered={false} />
+          <InquiryForm productTitle={`Вопрос по статье: ${data.title}`} />
+        </div>
+      </div>
+    </div>
+  </article>
+
+  <!-- Related Posts -->
+  {related.length > 0 && (
+    <section class="blog-related">
+      <div class="container">
+        <SectionHeading title="Похожие статьи" />
+        <Grid cols={3}>
+          {related.map((rp) => (
+            <Card href={`/blog/${rp.slug}/`}>
+              <article class="related-post">
+                <span class="blog-post__category">{rp.data.category}</span>
+                <h3>{rp.data.title}</h3>
+                <p>{rp.data.description}</p>
+              </article>
+            </Card>
+          ))}
+        </Grid>
+      </div>
+    </section>
+  )}
+
+  <CTASection
+    title="Нужна консультация?"
+    subtitle={`Появились вопросы по теме "${data.title}"? Напишите нам — поможем разобраться.`}
+    ctaText="Получить консультацию"
+    ctaHref="/kontakty/"
+  />
+
+  <script>
+    const copyBtn = document.getElementById('copy-link-btn');
+    if (copyBtn) {
+      copyBtn.addEventListener('click', async () => {
+        try {
+          await navigator.clipboard.writeText(copyBtn.dataset.url);
+          copyBtn.textContent = 'Скопировано!';
+          setTimeout(() => { copyBtn.textContent = 'Копировать ссылку'; }, 2000);
+        } catch {
+          copyBtn.textContent = 'Ошибка';
+        }
+      });
+    }
+  </script>
+</BaseLayout>
+
+<style>
+  .blog-post {
+    padding: 0 0 60px;
+  }
+
+  .blog-post__header {
+    text-align: center;
+    max-width: 700px;
+    margin: 0 auto 32px;
+  }
+
+  .blog-post__header h1 {
+    margin: 16px 0;
+  }
+
+  .blog-post__meta {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    font-size: 0.9rem;
+    color: var(--color-text-lighter);
+    flex-wrap: wrap;
+  }
+
+  .blog-post__image {
+    width: 100%;
+    max-width: 800px;
+    margin: 0 auto 40px;
+    aspect-ratio: 16/9;
+    background: var(--color-bg);
+    border-radius: var(--radius-xl);
+    overflow: hidden;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .blog-post__img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+
+  .blog-post__content {
+    max-width: 700px;
+    margin: 0 auto;
+  }
+
+  .blog-post__body {
+    font-size: 1.05rem;
+    line-height: 1.8;
+    color: var(--color-text);
+  }
+
+  .blog-post__body h2 {
+    margin-top: 40px;
+    margin-bottom: 16px;
+  }
+
+  .blog-post__body h3 {
+    margin-top: 32px;
+    margin-bottom: 12px;
+  }
+
+  .blog-post__body p {
+    margin-bottom: 1.2rem;
+  }
+
+  .blog-post__body ul, .blog-post__body ol {
+    margin-bottom: 1.2rem;
+  }
+
+  .blog-post__body li {
+    margin-bottom: 6px;
+  }
+
+  .blog-post__section {
+    margin-top: 50px;
+    padding-top: 40px;
+    border-top: 1px solid var(--color-stone-light);
+  }
+
+  .blog-post__faq-item {
+    padding: 16px 0;
+    border-bottom: 1px solid var(--color-stone-light);
+  }
+
+  .blog-post__faq-item summary {
+    font-weight: 600;
+    cursor: pointer;
+    padding: 8px 0;
+  }
+
+  .blog-post__faq-item p {
+    color: var(--color-text-light);
+    padding: 8px 0;
+    margin: 0;
+  }
+
+  .blog-post__share {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 24px 0;
+    margin-top: 40px;
+    border-top: 1px solid var(--color-stone-light);
+    border-bottom: 1px solid var(--color-stone-light);
+    flex-wrap: wrap;
+  }
+
+  .blog-post__share span {
+    font-weight: 600;
+    color: var(--color-text);
+  }
+
+  .share-btn {
+    padding: 8px 16px;
+    border: 1px solid var(--color-stone-light);
+    border-radius: var(--radius-sm);
+    background: var(--color-white);
+    font-family: var(--font-body);
+    font-size: 0.85rem;
+    font-weight: 500;
+    color: var(--color-text);
+    text-decoration: none;
+    cursor: pointer;
+    transition: all var(--transition);
+  }
+
+  .share-btn:hover {
+    border-color: var(--color-accent);
+    color: var(--color-accent);
+  }
+
+  .blog-post__question {
+    margin-top: 50px;
+  }
+
+  .blog-related {
+    background: var(--color-bg);
+  }
+
+  .related-post {
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+  }
+
+  .related-post h3 {
+    font-size: 1rem;
+    margin: 10px 0;
+  }
+
+  .related-post p {
+    font-size: 0.9rem;
+    color: var(--color-text-light);
+    flex: 1;
+  }
+</style>

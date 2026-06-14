@@ -1,0 +1,165 @@
+---
+import { resolveProductMainImage } from '../../lib/productHelpers';
+
+export interface Props {
+  product: any;
+  href: string;
+  decor?: string;
+  style?: string;
+  isHot?: boolean;
+  eager?: boolean;
+}
+
+const { product: rawProduct, href, decor, style: styleTag, isHot, eager = false } = Astro.props;
+const p = rawProduct.data || rawProduct;
+const mainImage = resolveProductMainImage(rawProduct);
+const loadingAttr = eager ? 'eager' : 'lazy';
+---
+
+<a {href} class="product-card" data-decor={decor || null} data-style={styleTag || null}>
+  <div class="product-card__image">
+    <img
+      src={mainImage}
+      alt={p.title}
+      class="product-card__img"
+      loading={loadingAttr}
+      onerror="this.style.display='none';this.nextElementSibling.style.display='flex'"
+    />
+    <div class="product-card__img-fallback" style="display:none;">
+      <svg width="48" height="48" viewBox="0 0 48 48" fill="none"><rect x="6" y="6" width="16" height="16" rx="2" fill="#1F3A5F" opacity="0.3"/><rect x="26" y="6" width="16" height="16" rx="2" fill="#C47A3A" opacity="0.3"/><rect x="6" y="26" width="16" height="16" rx="2" fill="#C47A3A" opacity="0.3"/><rect x="26" y="26" width="16" height="16" rx="2" fill="#1F3A5F" opacity="0.3"/></svg>
+    </div>
+    {isHot && <span class="product-card__badge">Хит</span>}
+    {styleTag && <span class="product-card__style-tag">{styleTag}</span>}
+  </div>
+  <div class="product-card__body">
+    <span class="product-card__code">{p.code}</span>
+    {decor && <span class="product-card__decor-tag">{decor}</span>}
+    <h3 class="product-card__title">{p.title}</h3>
+    <p class="product-card__subtitle">{p.subtitle}</p>
+    <div class="product-card__specs">
+      <span>{p.specs.size}</span>
+      <span>{p.specs.thickness}</span>
+    </div>
+    <span class="product-card__cta">Подробнее →</span>
+  </div>
+</a>
+
+<style>
+  .product-card {
+    display: flex;
+    flex-direction: column;
+    background: var(--color-white);
+    border-radius: var(--radius-lg);
+    overflow: hidden;
+    text-decoration: none;
+    color: inherit;
+    box-shadow: var(--shadow-sm);
+    transition: all var(--transition);
+    position: relative;
+  }
+
+  .product-card:hover {
+    box-shadow: var(--shadow-lg);
+    transform: translateY(-3px);
+  }
+
+  .product-card__image {
+    position: relative;
+    aspect-ratio: 1;
+    overflow: hidden;
+    background: var(--color-bg);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .product-card__badge {
+    position: absolute;
+    top: 12px;
+    left: 12px;
+    padding: 4px 10px;
+    background: var(--color-accent);
+    color: var(--color-white);
+    border-radius: 4px;
+    font-size: 0.7rem;
+    font-weight: 700;
+    z-index: 1;
+  }
+
+  .product-card__style-tag {
+    position: absolute;
+    top: 12px;
+    right: 12px;
+    padding: 4px 10px;
+    background: var(--color-primary);
+    color: var(--color-white);
+    border-radius: 4px;
+    font-size: 0.7rem;
+    font-weight: 700;
+    z-index: 1;
+  }
+
+  .product-card__img { width: 100%; height: 100%; object-fit: cover; }
+
+  .product-card__img-fallback {
+    width: 100%; height: 100%; display: flex;
+    align-items: center; justify-content: center; background: var(--color-bg);
+  }
+
+  .product-card__body {
+    padding: 20px;
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+  }
+
+  .product-card__code {
+    display: inline-block;
+    padding: 3px 10px;
+    background: var(--color-primary);
+    color: var(--color-white);
+    border-radius: 4px;
+    font-size: 0.75rem;
+    font-weight: 700;
+    margin-bottom: 6px;
+    align-self: flex-start;
+  }
+
+  .product-card__decor-tag {
+    display: inline-block;
+    padding: 2px 8px;
+    background: var(--color-bg);
+    color: var(--color-text-light);
+    border-radius: 4px;
+    font-size: 0.7rem;
+    font-weight: 600;
+    margin-bottom: 6px;
+    align-self: flex-start;
+  }
+
+  .product-card__title {
+    font-size: 1rem;
+    margin-bottom: 4px;
+  }
+
+  .product-card__subtitle {
+    font-size: 0.85rem;
+    color: var(--color-text-light);
+    margin-bottom: 12px;
+  }
+
+  .product-card__specs {
+    display: flex;
+    gap: 16px;
+    font-size: 0.8rem;
+    color: var(--color-text-lighter);
+    margin-bottom: 16px;
+    margin-top: auto;
+  }
+
+  .product-card__cta {
+    color: var(--color-accent);
+    font-weight: 600;
+    font-size: 0.9rem;
+  }
+</style>

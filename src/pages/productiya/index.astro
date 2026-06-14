@@ -1,0 +1,371 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import Breadcrumb from '../../components/ui/Breadcrumb.astro';
+import SectionHeading from '../../components/ui/SectionHeading.astro';
+import CTASection from '../../components/sections/CTASection.astro';
+import InquiryForm from '../../components/sections/InquiryForm.astro';
+import ProductCard from '../../components/ui/ProductCard.astro';
+import { getCollection } from 'astro:content';
+import { SITE_CONFIG } from '../../lib/siteConfig';
+import { getDecorTag, DECOR_TAGS, getStyleTag, STYLE_TAGS } from '../../lib/productHelpers';
+
+export async function getStaticPaths() {
+  return [{ params: {}, props: {} }];
+}
+
+const allProducts = await getCollection('products');
+const floorTiles = allProducts.filter((p) => p.data.category === 'floor-tiles').sort((a, b) => a.data.weight - b.data.weight);
+const wallTiles = allProducts.filter((p) => p.data.category === 'wall-tiles').sort((a, b) => a.data.weight - b.data.weight);
+
+// Mark first 8 products in each category as "Хит"
+const hotProducts = new Set();
+floorTiles.slice(0, 8).forEach(p => hotProducts.add(p.id));
+wallTiles.slice(0, 8).forEach(p => hotProducts.add(p.id));
+
+const totalCount = allProducts.length;
+---
+
+<BaseLayout
+  title="Продукция — Самоклеящаяся плитка и 3D панели"
+  description="Каталог самоклеящейся ПВХ плитки FT и 3D стеновых панелей MT. Оптом от производителя из Китая."
+>
+  <div class="container">
+    <Breadcrumb items={[{ label: 'Продукция' }]} />
+  </div>
+
+  <section class="products-page">
+    <div class="container">
+      <SectionHeading
+        title="Вся продукция"
+        subtitle={`Самоклеящаяся плитка для пола и 3D панели для стен. Более ${totalCount} видов.`}
+      />
+
+      <!-- Category Tabs + Decor Filter + Style Filter -->
+      <div class="products__toolbar">
+        <div class="products__tabs">
+          <button class="products__tab active" data-tab="floor-tiles">
+            Плитка для пола FT <span class="products__tab-count">{floorTiles.length}</span>
+          </button>
+          <button class="products__tab" data-tab="wall-tiles">
+            Стеновые панели MT <span class="products__tab-count">{wallTiles.length}</span>
+          </button>
+        </div>
+        <div class="products__decor-filters">
+          <button class="decor-filter active" data-decor="all">Все</button>
+          {DECOR_TAGS.map(tag => (
+            <button class="decor-filter" data-decor={tag}>{tag}</button>
+          ))}
+        </div>
+        <div class="products__style-filters">
+          <span class="filter-label">Стиль:</span>
+          <button class="style-filter active" data-style="all">Все</button>
+          {STYLE_TAGS.map(tag => (
+            <button class="style-filter" data-style={tag}>{tag}</button>
+          ))}
+        </div>
+      </div>
+
+      <!-- Product Grid Helper -->
+      {[
+        { id: 'floor-tiles', items: floorTiles, category: SITE_CONFIG.categories[0] },
+        { id: 'wall-tiles', items: wallTiles, category: SITE_CONFIG.categories[1] },
+      ].map(({ id, items, category }) => (
+        <div class="products__grid" id={id} style={id === 'floor-tiles' ? '' : 'display:none;'}>
+          <div class="products__category-info">
+            <h3>{category.title}</h3>
+            <p>{category.description}</p>
+          </div>
+
+          {items.length > 0 ? (
+            <div class="products__items">
+              {items.map((product, i) => {
+                const decor = getDecorTag(product.data.subtitle);
+                const style = getStyleTag(product, decor);
+                return (
+                  <ProductCard
+                    product={product}
+                    href={`/productiya/${id}/${product.slug}/`}
+                    decor={decor}
+                    style={style}
+                    isHot={hotProducts.has(product.id)}
+                    eager={i < 12}
+                  />
+                );
+              })}
+            </div>
+          ) : (
+            <div class="products__empty">
+              <p>Нет товаров в этой категории.</p>
+            </div>
+          )}
+        </div>
+      ))}
+
+      <!-- Empty state for filters (shown via JS) -->
+      <div class="products__no-results" id="no-results" style="display:none;">
+        <p>Нет товаров по выбранным фильтрам.</p>
+        <button class="decor-filter reset-filter" data-decor="all">Показать все</button>
+      </div>
+    </div>
+  </section>
+
+  <!-- Inquiry Section -->
+  <section id="inquiry" class="detail-inquiry">
+    <div class="container">
+      <SectionHeading
+        title="Получить оптовые цены"
+        subtitle="Отправьте запрос — мы подготовим цены, сроки и отправим образцы"
+      />
+      <InquiryForm />
+    </div>
+  </section>
+
+  <CTASection ctaHref="#inquiry" />
+
+  <script>
+    // State: current active filters
+    let activeDecor = 'all';
+    let activeStyle = 'all';
+
+    const tabs = document.querySelectorAll('.products__tab');
+    const noResults = document.getElementById('no-results');
+    const decorBtns = document.querySelectorAll('.decor-filter');
+    const styleBtns = document.querySelectorAll('.style-filter');
+
+    function applyFilters() {
+      const visibleGrid = document.querySelector('.products__grid[style*="block"], .products__grid:not([style])');
+      const items = visibleGrid ? visibleGrid.querySelectorAll('.product-card') : [];
+
+      let visibleCount = 0;
+      items.forEach((card) => {
+        const matchDecor = activeDecor === 'all' || card.dataset.decor === activeDecor;
+        const matchStyle = activeStyle === 'all' || card.dataset.style === activeStyle;
+        if (matchDecor && matchStyle) {
+          card.style.display = '';
+          visibleCount++;
+        } else {
+          card.style.display = 'none';
+        }
+      });
+
+      if (noResults) {
+        noResults.style.display = visibleCount === 0 ? 'block' : 'none';
+      }
+    }
+
+    // Category tabs
+    tabs.forEach((tab) => {
+      tab.addEventListener('click', () => {
+        tabs.forEach((t) => t.classList.remove('active'));
+        tab.classList.add('active');
+
+        const grids = document.querySelectorAll('.products__grid');
+        const activeGrid = document.getElementById(tab.dataset.tab);
+        grids.forEach((g) => g.style.display = 'none');
+        activeGrid.style.display = '';
+
+        // Reset filters
+        activeDecor = 'all';
+        activeStyle = 'all';
+        decorBtns.forEach(f => f.classList.remove('active'));
+        styleBtns.forEach(f => f.classList.remove('active'));
+        document.querySelector('.decor-filter[data-decor="all"]')?.classList.add('active');
+        document.querySelector('.style-filter[data-style="all"]')?.classList.add('active');
+
+        if (noResults) noResults.style.display = 'none';
+        applyFilters();
+      });
+    });
+
+    // Decor type filters
+    decorBtns.forEach((btn) => {
+      btn.addEventListener('click', () => {
+        decorBtns.forEach(b => b.classList.remove('active'));
+        btn.classList.add('active');
+        activeDecor = btn.dataset.decor;
+        applyFilters();
+      });
+    });
+
+    // Style filters
+    styleBtns.forEach((btn) => {
+      btn.addEventListener('click', () => {
+        styleBtns.forEach(b => b.classList.remove('active'));
+        btn.classList.add('active');
+        activeStyle = btn.dataset.style;
+        applyFilters();
+      });
+    });
+  </script>
+</BaseLayout>
+
+<style>
+  .products-page {
+    padding: 0 0 80px;
+  }
+
+  .products__toolbar {
+    margin-bottom: 40px;
+  }
+
+  .products__tabs {
+    display: flex;
+    gap: 8px;
+    margin-bottom: 12px;
+    flex-wrap: wrap;
+  }
+
+  .products__tab {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 14px 28px;
+    background: var(--color-white);
+    border: 2px solid var(--color-stone-light);
+    border-radius: var(--radius);
+    font-family: var(--font-body);
+    font-size: 1rem;
+    font-weight: 600;
+    color: var(--color-text);
+    cursor: pointer;
+    transition: all var(--transition);
+  }
+
+  .products__tab:hover { border-color: var(--color-primary); }
+
+  .products__tab.active {
+    background: var(--color-primary);
+    border-color: var(--color-primary);
+    color: var(--color-white);
+  }
+
+  .products__tab-count {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    min-width: 24px;
+    height: 24px;
+    padding: 0 6px;
+    border-radius: 12px;
+    font-size: 0.75rem;
+    font-weight: 700;
+    background: var(--color-bg);
+    color: var(--color-text);
+  }
+
+  .products__tab.active .products__tab-count {
+    background: rgba(255,255,255,0.2);
+    color: var(--color-white);
+  }
+
+  /* Decor filters */
+  .products__decor-filters {
+    display: flex;
+    gap: 6px;
+    flex-wrap: wrap;
+  }
+
+  .decor-filter {
+    padding: 6px 14px;
+    border: 1.5px solid var(--color-stone-light);
+    border-radius: 20px;
+    background: var(--color-white);
+    font-family: var(--font-body);
+    font-size: 0.8rem;
+    font-weight: 500;
+    color: var(--color-text-light);
+    cursor: pointer;
+    transition: all var(--transition);
+  }
+
+  .decor-filter:hover {
+    border-color: var(--color-primary);
+    color: var(--color-primary);
+  }
+
+  .decor-filter.active {
+    background: var(--color-primary);
+    border-color: var(--color-primary);
+    color: var(--color-white);
+  }
+
+  .reset-filter {
+    margin-top: 12px;
+    padding: 10px 24px;
+    font-size: 0.9rem;
+  }
+
+  /* Style filters */
+  .products__style-filters {
+    display: flex;
+    gap: 6px;
+    flex-wrap: wrap;
+    align-items: center;
+    margin-top: 10px;
+  }
+
+  .products__style-filters .filter-label {
+    font-size: 0.8rem;
+    font-weight: 600;
+    color: var(--color-text-light);
+    margin-right: 4px;
+  }
+
+  .style-filter {
+    padding: 6px 14px;
+    border: 1.5px solid var(--color-stone-light);
+    border-radius: 20px;
+    background: var(--color-white);
+    font-family: var(--font-body);
+    font-size: 0.8rem;
+    font-weight: 500;
+    color: var(--color-text-light);
+    cursor: pointer;
+    transition: all var(--transition);
+  }
+
+  .style-filter:hover {
+    border-color: var(--color-accent);
+    color: var(--color-accent);
+  }
+
+  .style-filter.active {
+    background: var(--color-accent);
+    border-color: var(--color-accent);
+    color: var(--color-white);
+  }
+
+  .products__category-info {
+    margin-bottom: 30px;
+    padding: 24px;
+    background: var(--color-white);
+    border-radius: var(--radius);
+    border-left: 4px solid var(--color-accent);
+  }
+
+  .products__category-info h3 { margin-bottom: 8px; }
+  .products__category-info p { color: var(--color-text-light); margin: 0; }
+
+  .products__items {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+    gap: 24px;
+  }
+
+  .products__empty,
+  .products__no-results {
+    text-align: center;
+    padding: 60px 20px;
+    background: var(--color-white);
+    border-radius: var(--radius-lg);
+  }
+
+  .products__empty p,
+  .products__no-results p {
+    color: var(--color-text-light);
+    font-size: 1.1rem;
+    margin-bottom: 16px;
+  }
+
+  .detail-inquiry { background: var(--color-bg); }
+</style>

@@ -1,0 +1,105 @@
+---
+export interface Props {
+  title?: string;
+  subtitle?: string;
+  ctaText?: string;
+  ctaHref?: string;
+  variant?: 'navy' | 'beige';
+}
+
+const {
+  title = 'Готовы начать сотрудничество?',
+  subtitle = 'Отправьте запрос и получите оптовые цены, образцы и консультацию в течение 24 часов.',
+  ctaText = 'Отправить запрос',
+  ctaHref = '/kontakty/',
+  variant = 'navy',
+} = Astro.props;
+---
+
+<section class={`cta-section cta-section--${variant}`}>
+  <div class="container">
+    <div class="cta-section__inner">
+      <h2 class="cta-section__title">{title}</h2>
+      <p class="cta-section__subtitle">{subtitle}</p>
+      <a href={ctaHref} class="cta-section__btn">{ctaText}</a>
+    </div>
+  </div>
+</section>
+
+<style>
+  .cta-section {
+    text-align: center;
+  }
+
+  .cta-section--navy {
+    background: var(--color-primary);
+  }
+
+  .cta-section--beige {
+    background: var(--color-bg);
+  }
+
+  .cta-section__inner {
+    max-width: 600px;
+    margin: 0 auto;
+  }
+
+  .cta-section__title {
+    margin-bottom: 16px;
+  }
+
+  .cta-section--navy .cta-section__title {
+    color: var(--color-white);
+  }
+
+  .cta-section--beige .cta-section__title {
+    color: var(--color-primary);
+  }
+
+  .cta-section__subtitle {
+    font-size: 1.05rem;
+    margin-bottom: 32px;
+    line-height: 1.6;
+  }
+
+  .cta-section--navy .cta-section__subtitle {
+    color: rgba(255, 255, 255, 0.8);
+  }
+
+  .cta-section--beige .cta-section__subtitle {
+    color: var(--color-text-light);
+  }
+
+  .cta-section__btn {
+    display: inline-block;
+    padding: 16px 40px;
+    border-radius: var(--radius);
+    font-weight: 700;
+    font-size: 1.05rem;
+    text-decoration: none;
+    transition: all var(--transition);
+  }
+
+  .cta-section--navy .cta-section__btn {
+    background: var(--color-accent);
+    color: var(--color-white);
+  }
+
+  .cta-section--navy .cta-section__btn:hover {
+    background: var(--color-accent-dark);
+    transform: translateY(-2px);
+    box-shadow: var(--shadow-lg);
+    color: var(--color-white);
+  }
+
+  .cta-section--beige .cta-section__btn {
+    background: var(--color-accent);
+    color: var(--color-white);
+  }
+
+  .cta-section--beige .cta-section__btn:hover {
+    background: var(--color-accent-dark);
+    transform: translateY(-2px);
+    color: var(--color-white);
+  }
+</style>

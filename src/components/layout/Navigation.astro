@@ -1,0 +1,49 @@
+---
+import { SITE_CONFIG } from '../../lib/siteConfig';
+const { navigation } = SITE_CONFIG;
+---
+
+<nav class="nav" id="main-nav">
+  <ul class="nav__list">
+    {navigation.map((item) => (
+      <li class="nav__item">
+        <a href={item.href} class="nav__link">
+          {item.label}
+        </a>
+      </li>
+    ))}
+  </ul>
+</nav>
+
+<style>
+  .nav__list {
+    display: flex;
+    list-style: none;
+    gap: 4px;
+    padding: 0;
+    margin: 0;
+  }
+
+  .nav__link {
+    display: block;
+    padding: 8px 14px;
+    font-size: 0.9rem;
+    font-weight: 500;
+    color: var(--color-text);
+    text-decoration: none;
+    border-radius: var(--radius-sm);
+    transition: all var(--transition);
+    white-space: nowrap;
+  }
+
+  .nav__link:hover {
+    background: var(--color-bg);
+    color: var(--color-primary);
+  }
+
+  @media (max-width: 968px) {
+    .nav {
+      display: none;
+    }
+  }
+</style>
