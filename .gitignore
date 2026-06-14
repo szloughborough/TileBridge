@@ -25,5 +25,11 @@ Thumbs.db
 .env
 .env.local
 
+# Large raw image formats (not web-friendly)
+*.tif
+*.tiff
+*.psd
+*.bmp
+
 # Temp files
 *.tmp
