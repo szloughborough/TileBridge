@@ -8,9 +8,6 @@ dist/
 # Raw materials (large binary files)
 material/
 
-# Product images (excluded due to size - host separately)
-public/assets/images/products/*/
-
 # Python
 __pycache__/
 *.pyc
